@@ -23,12 +23,14 @@ class SpriteBall(pygame.sprite.Sprite):
         self.pad = pad
         self.image = pygame.image.load("data/ball.png")
         self.image = self.image.convert()
+        colorkey = self.image.get_at((0,0))
+        self.image.set_colorkey(colorkey, pygame.RLEACCEL)
         self.rect = self.image.get_rect()
         screen = pygame.display.get_surface()
         self.area = screen.get_rect()
         self.rect.topleft = 10, 10
-        self.move = [5,5]
-        #self.move = [15,10]
+        #self.move = [5,5]
+        self.move = [15,10]
 
     def update(self):
         self._fly() # leć, kurwa, leć!
