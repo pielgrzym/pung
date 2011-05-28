@@ -9,11 +9,6 @@ class SpritePad(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self):
-        """
-        docstring
-    
-        """
-    
         pos = pygame.mouse.get_pos()[1]
         self.rect.midleft = [0,pos]
 
