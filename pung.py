@@ -4,7 +4,7 @@ import sys, pygame
 class SpritePad(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("img/pad.png")
+        self.image = pygame.image.load("data/pad.png")
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
 
@@ -21,7 +21,7 @@ class SpriteBall(pygame.sprite.Sprite):
     def __init__(self, pad=None):
         pygame.sprite.Sprite.__init__(self)
         self.pad = pad
-        self.image = pygame.image.load("img/ball.png")
+        self.image = pygame.image.load("data/ball.png")
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
         screen = pygame.display.get_surface()
