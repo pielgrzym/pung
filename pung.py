@@ -80,7 +80,7 @@ def main():
     pygame.display.flip()
     pad = SpritePad()
     ball = SpriteBall(pad=pad)
-    allsprites = pygame.sprite.RenderPlain((pad,ball))
+    allsprites = pygame.sprite.RenderUpdates((pad,ball))
     clock = pygame.time.Clock()
 
     while 1:
