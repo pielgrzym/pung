@@ -53,6 +53,13 @@ class Movable(object):
         x,y = coords
         self.rect = self.rect.move(x,y)
 
+    def smooth_move(self, coords):
+        x,y = coords
+        for i in range(60):
+            self.move([x,y])
+            screen.blit(self.image, self.rect)
+            pygame.display.update(self.rect)
+            pygame.time.delay(1)
 
 class Pad(Movable):
     def __init__(self, start=[0,0]):
@@ -63,19 +70,9 @@ class Pad(Movable):
     def __call__(self,event=None):
         if not event: return
         if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-            for x in range(60):
-                screen.blit(screen, self.rect, self.rect)
-                self.rect = self.rect.move(0,-2)
-                screen.blit(self.image, self.rect)
-                pygame.display.update(self.rect)
-                pygame.time.delay(1)
+            self.smooth_move([0,-2])
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-            for x in range(60):
-                screen.blit(screen, self.rect, self.rect)
-                self.rect = self.rect.move(0,2)
-                screen.blit(self.image, self.rect)
-                pygame.display.update(self.rect)
-                pygame.time.delay(1)
+            self.smooth_move([0,2])
 
 class Ball(Movable):
     def __init__(self, start=[0,0], pad=None):
@@ -91,7 +88,7 @@ class Ball(Movable):
         if self.rect.top < 0 or self.rect.bottom > height:
             self.speed[1] = -self.speed[1]
         if self.rect.left <= self.pad.rect.right:
-            if self.rect.y <= self.pad.rect.y and self.rect.y-100 <= self.pad.rect.y:
+            if self.rect.y >= self.pad.rect.y-50 and self.rect.y <= self.pad.rect.y+159:
                 self.speed[0] = -self.speed[0]
             elif self.rect.left <= 0:
                 sys.exit(0)
