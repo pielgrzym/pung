@@ -45,11 +45,12 @@ class SpriteBall(pygame.sprite.Sprite):
                 self.move[0] = -self.move[0]
             if self.rect.top < self.area.top or self.rect.bottom > self.area.bottom:
                 self.move[1] = -self.move[1]
-            if self.rect.left < self.pad.rect.right:
-                if self.rect.y >= self.pad.rect.y-50 and self.rect.y <= self.pad.rect.y+159:
-                    self.move[0] = -self.move[0]
-                else:
-                    sys.exit(0)
+            #if self.pad.rect.colliderect(self.rect):
+            if self.rect.colliderect(self.pad.rect):
+                self.move[0] = -self.move[0]
+            else:
+                if self.rect.left < self.area.left:
+                    pygame.quit()
             #if self.rect.left < self.area.left or self.rect.right > self.area.right:
                 #self.move[0] = -self.move[0]
                 #self.move[1] = -self.move[1]
