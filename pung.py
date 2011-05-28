@@ -78,7 +78,7 @@ def main():
 
     if pygame.font:
         font = pygame.font.Font(None, 36)
-        text = font.render("PUNG motherfucker", 1, (10,10,10))
+        text = font.render("PUNG motherfucker v0.25", 1, (255,255,255))
         textpos = text.get_rect(centerx=background.get_width()/2)
         background.blit(text, textpos)
 
