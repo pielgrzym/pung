@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys, pygame
+import pygame
 
 class SpritePad(pygame.sprite.Sprite):
     def __init__(self):
@@ -62,7 +62,6 @@ def main():
     """
     pygame.init()
     size = width, height = 800, 600
-    bg_col = 0,0,0
 
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Pung - Pielgrzym's pong")
