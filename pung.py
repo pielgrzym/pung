@@ -21,7 +21,7 @@ class SpriteBall(pygame.sprite.Sprite):
     def __init__(self, pad=None):
         pygame.sprite.Sprite.__init__(self)
         self.pad = pad
-        self.image = pygame.image.load("img/ball.gif")
+        self.image = pygame.image.load("img/ball.png")
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
         screen = pygame.display.get_surface()
