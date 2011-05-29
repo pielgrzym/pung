@@ -2,30 +2,30 @@
 import pygame, os
 
 class SpritePad(pygame.sprite.Sprite):
-    def __init__(self, relative_to=None):
+    def __init__(self, relative_to=None, align=0):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join("data","pad.png"))
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
+        self.align = align
         self.relative_to = relative_to
         self.hitzones = [ 
                 pygame.Rect(self.rect.left, self.rect.top, 20, 20),
                 pygame.Rect(self.rect.left, self.rect.top+140, 20, 20),
                 ]
-        #print 'rect: %d, %d' % (self.rect.x, self.rect.y)
-        #print 'top: %d, %d' % (self.hitzones[0].x, self.hitzones[0].y)
-        #print 'mid: %d, %d' % (self.hitzones[1].x, self.hitzones[1].y)
-        #print 'bot: %d, %d' % (self.hitzones[2].x, self.hitzones[2].y)
-
 
     def update(self):
+        if self.align:
+            border = self.relative_to.right-self.rect.width
+        else:
+            border = self.relative_to.left
         pos = pygame.mouse.get_pos()[1]
         if pos < self.relative_to.top+(self.rect.height/2):
             self.rect.top = self.relative_to.top
         elif pos > self.relative_to.bottom-(self.rect.height/2):
             self.rect.bottom = self.relative_to.bottom
         else:
-            self.rect.midleft = [0, pos]
+            self.rect.midleft = [border, pos]
         self.hitzones[0].top = self.rect.top
         self.hitzones[1].bottom = self.rect.bottom
 
@@ -146,8 +146,9 @@ def main():
     background.blit(playarea, playarea_rect)
 
     pad_left = SpritePad(relative_to=playarea_rect)
+    pad_right = SpritePad(relative_to=playarea_rect, align=1)
     ball = SpriteBall(pad_left=pad_left, relative_to=playarea_rect)
-    allsprites = pygame.sprite.RenderUpdates((pad_left,ball))
+    allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
     clock = pygame.time.Clock()
 
     while 1:
