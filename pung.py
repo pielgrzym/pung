@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-import pygame
+import pygame, os
 
 class SpritePad(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("data/pad.png")
+        self.image = pygame.image.load(os.path.join("data","pad.png"))
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
         self.hitzones = [ 
                 pygame.Rect(self.rect.left, self.rect.top, 20, 20),
-                pygame.Rect(self.rect.left, self.rect.bottom-20, 20, 20),
+                pygame.Rect(self.rect.left, self.rect.top+140, 20, 20),
                 ]
         #print 'rect: %d, %d' % (self.rect.x, self.rect.y)
         #print 'top: %d, %d' % (self.hitzones[0].x, self.hitzones[0].y)
@@ -27,15 +27,15 @@ class SpriteBall(pygame.sprite.Sprite):
     def __init__(self, pad=None):
         pygame.sprite.Sprite.__init__(self)
         self.pad = pad
-        self.image = pygame.image.load("data/ball.png")
-        self.image = self.image.convert()
+        self.image = pygame.image.load(os.path.join("data", "trollface.png"))
+        self.image = self.image.convert_alpha()
         colorkey = self.image.get_at((0,0))
         self.image.set_colorkey(colorkey, pygame.RLEACCEL)
         self.rect = self.image.get_rect()
         screen = pygame.display.get_surface()
         self.area = screen.get_rect()
-        self.rect.topleft = 30, 10
-        self.move = [4,6]
+        self.rect.topleft = 30, screen.get_size()[1]/2 # start pos
+        self.move = [4,6] # movement vector
         #self.move = [15,10]
 
     def update(self):
@@ -55,6 +55,7 @@ class SpriteBall(pygame.sprite.Sprite):
                     self.move[0] -= 10
                 if self.move[1] > 10:
                     self.move[1] -= 5
+                self.image = pygame.transform.flip(self.image, 1, 0)
             if self.rect.top < self.area.top or self.rect.bottom > self.area.bottom:
                 self.move[1] = -self.move[1]
                 if self.move[0] > 15:
@@ -70,6 +71,7 @@ class SpriteBall(pygame.sprite.Sprite):
                 elif self.rect.colliderect(self.pad.hitzones[1]):
                     print 'bot'
                     self.move[1] += 5
+                self.image = pygame.transform.flip(self.image, 1, 0)
             else:
                 if self.rect.left < self.area.left:
                     # begin fadeout
@@ -90,7 +92,6 @@ class SpriteBall(pygame.sprite.Sprite):
                     self.move = [0,0] # stop
                     self.kill() # die :]
             newpos = self.rect.move((self.move[0], self.move[1]))
-            self.image = pygame.transform.flip(self.image, 1, 0)
         self.rect = newpos
 
 def game_over(background):
