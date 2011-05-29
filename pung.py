@@ -7,10 +7,21 @@ class SpritePad(pygame.sprite.Sprite):
         self.image = pygame.image.load("data/pad.png")
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
+        self.hitzones = [ 
+                pygame.Rect(self.rect.left, self.rect.top, 20, 20),
+                pygame.Rect(self.rect.left, self.rect.bottom-20, 20, 20),
+                ]
+        #print 'rect: %d, %d' % (self.rect.x, self.rect.y)
+        #print 'top: %d, %d' % (self.hitzones[0].x, self.hitzones[0].y)
+        #print 'mid: %d, %d' % (self.hitzones[1].x, self.hitzones[1].y)
+        #print 'bot: %d, %d' % (self.hitzones[2].x, self.hitzones[2].y)
+
 
     def update(self):
         pos = pygame.mouse.get_pos()[1]
-        self.rect.midleft = [0,pos]
+        self.rect.midleft = [0, pos]
+        self.hitzones[0].top = self.rect.top
+        self.hitzones[1].bottom = self.rect.bottom
 
 class SpriteBall(pygame.sprite.Sprite):
     def __init__(self, pad=None):
@@ -23,9 +34,9 @@ class SpriteBall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         screen = pygame.display.get_surface()
         self.area = screen.get_rect()
-        self.rect.topleft = 10, 10
-        #self.move = [5,5]
-        self.move = [15,10]
+        self.rect.topleft = 30, 10
+        self.move = [4,6]
+        #self.move = [15,10]
 
     def update(self):
         self._fly() # leć, kurwa, leć!
@@ -40,11 +51,25 @@ class SpriteBall(pygame.sprite.Sprite):
         if not self.area.contains(newpos):
             if self.rect.right > self.area.right:
                 self.move[0] = -self.move[0]
+                if self.move[0] > 15:
+                    self.move[0] -= 10
+                if self.move[1] > 10:
+                    self.move[1] -= 5
             if self.rect.top < self.area.top or self.rect.bottom > self.area.bottom:
                 self.move[1] = -self.move[1]
+                if self.move[0] > 15:
+                    self.move[0] -= 10
+                if self.move[1] > 10:
+                    self.move[1] -= 5
             #if self.pad.rect.colliderect(self.rect):
             if self.rect.colliderect(self.pad.rect):
                 self.move[0] = -self.move[0]
+                if self.rect.colliderect(self.pad.hitzones[0]):
+                    print 'top'
+                    self.move[1] -= 5
+                elif self.rect.colliderect(self.pad.hitzones[1]):
+                    print 'bot'
+                    self.move[1] += 5
             else:
                 if self.rect.left < self.area.left:
                     # begin fadeout
