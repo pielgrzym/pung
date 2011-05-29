@@ -59,7 +59,6 @@ class SpriteBall(pygame.sprite.Sprite):
                         xfade = src + diff.astype(N.uint)
                     else:
                         xfade = src + diff.astype(N.Int)
-                    screen = pygame.display.get_surface()
                     surfarray.blit_array(self.image, xfade)
                     pygame.display.flip()
                     # end fadeout
