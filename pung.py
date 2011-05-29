@@ -47,13 +47,42 @@ class SpriteBall(pygame.sprite.Sprite):
                 self.move[0] = -self.move[0]
             else:
                 if self.rect.left < self.area.left:
-                    pygame.quit()
-            #if self.rect.left < self.area.left or self.rect.right > self.area.right:
-                #self.move[0] = -self.move[0]
-                #self.move[1] = -self.move[1]
+                    # begin fadeout
+                    from pygame import surfarray
+                    import numpy as N
+                    rgbarray = surfarray.array3d(self.image)
+                    src = N.array(rgbarray)
+                    dest = N.zeros(rgbarray.shape)
+                    dest[:] = 0, 0, 0
+                    diff = (dest - src) * 0.50
+                    if surfarray.get_arraytype() == 'numpy':
+                        xfade = src + diff.astype(N.uint)
+                    else:
+                        xfade = src + diff.astype(N.Int)
+                    screen = pygame.display.get_surface()
+                    surfarray.blit_array(self.image, xfade)
+                    pygame.display.flip()
+                    # end fadeout
+                    self.move = [0,0] # stop
+                    self.kill() # die :]
             newpos = self.rect.move((self.move[0], self.move[1]))
             self.image = pygame.transform.flip(self.image, 1, 0)
         self.rect = newpos
+
+def game_over(background):
+    """
+    What do you think it does??
+
+    """
+    background = pygame.display.get_surface()
+    if pygame.font:
+        font = pygame.font.Font(None, 128)
+        text = font.render("Gej over", 1, (255,255,255))
+        textpos = text.get_rect(centerx=background.get_width()/2,
+                centery=background.get_height()/2)
+        background.blit(text, textpos)
+        pygame.display.flip()
+
 
 def main():
     """
@@ -90,10 +119,15 @@ def main():
                 return
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return
-        allsprites.update()
-        screen.blit(background, (0, 0))
-        allsprites.draw(screen)
-        pygame.display.flip()
+        if ball in allsprites:
+            allsprites.update()
+            screen.blit(background, (0, 0))
+            allsprites.draw(screen)
+            pygame.display.flip()
+        else:
+            game_over(background)
+            pygame.display.flip()
+
     pygame.quit()
 
 if __name__ == '__main__':
