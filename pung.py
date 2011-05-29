@@ -49,7 +49,7 @@ def main():
 
     pad_left = Pad(relative_to=playarea_rect)
     pad_right = Pad(relative_to=playarea_rect, align=1)
-    ball = Ball(pad_left=pad_left, relative_to=playarea_rect)
+    ball = Ball(pad_left=pad_left, relative_to=playarea_rect, background=background)
     allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
     clock = pygame.time.Clock()
 
@@ -62,6 +62,7 @@ def main():
                 return
         if ball in allsprites:
             allsprites.update()
+            screen.blit(ball.score.avatars, ball.score.avatars_rect)
             screen.blit(background, (0, 0))
             allsprites.draw(screen)
             pygame.display.flip()

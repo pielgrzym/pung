@@ -1,6 +1,53 @@
 # -*- coding: utf-8 -*-
 import pygame, os
 
+class Score(object):
+    def __init__(self, background=None):
+        self.player = 0
+        self.ai = 0
+        self.avatars = pygame.image.load(os.path.join("data","score.png"))
+        self.avatars.convert_alpha()
+        self.avatars_rect = self.avatars.get_rect()
+        screen = pygame.display.get_surface()
+        self.avatars_rect.midtop = [screen.get_size()[0]/2, 0]
+        background.blit(self.avatars, self.avatars_rect)
+
+    def reset(self):
+        """
+        Reset both score
+    
+        """
+        self.player = 0
+        self.ai = 0
+
+    def __check_win(self):
+        """
+        Checks if one of the players won
+    
+        """
+    
+        if self.player != self.ai:
+            if self.player - self.ai > 1:
+                print 'player won'
+            elif self.ai - self.player > 1:
+                print 'ai won'
+
+    def point_for_player(self):
+        """
+        Increment score
+    
+        """
+        self.player += 1
+        self.__check_win()
+    
+    def point_for_ai(self):
+        """
+        Increment score
+    
+        """
+        self.ai += 1
+        self.__check_win()
+
 class Pad(pygame.sprite.Sprite):
     def __init__(self, relative_to=None, align=0):
         pygame.sprite.Sprite.__init__(self)
@@ -30,7 +77,7 @@ class Pad(pygame.sprite.Sprite):
         self.hitzones[1].bottom = self.rect.bottom
 
 class Ball(pygame.sprite.Sprite):
-    def __init__(self, pad_left=None, relative_to=None):
+    def __init__(self, pad_left=None, relative_to=None, background=None):
         pygame.sprite.Sprite.__init__(self)
         self.pad_left = pad_left
         self.image = pygame.image.load(os.path.join("data", "trollface.png"))
@@ -42,6 +89,7 @@ class Ball(pygame.sprite.Sprite):
         self.relative_to = relative_to
         self.rect.topleft = screen.get_size()[0]/2, screen.get_size()[1]/2 # start pos
         self.move = [4,6] # movement vector
+        self.score = Score(background)
         #self.move = [15,10]
 
     def update(self):
