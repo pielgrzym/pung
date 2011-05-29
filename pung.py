@@ -102,7 +102,7 @@ def game_over(background):
     background = pygame.display.get_surface()
     if pygame.font:
         font = pygame.font.Font(None, 128)
-        text = font.render("Gej over", 1, (255,255,255))
+        text = font.render("FAIL!", 1, (255,15,15))
         textpos = text.get_rect(centerx=background.get_width()/2,
                 centery=background.get_height()/2)
         background.blit(text, textpos)
@@ -118,7 +118,7 @@ def main():
     size = width, height = 800, 600
 
     screen = pygame.display.set_mode(size)
-    pygame.display.set_caption("Pung - Pielgrzym's pong")
+    pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
     pygame.mouse.set_visible(0)
     background = pygame.Surface(screen.get_size())
     background = background.convert()
@@ -126,7 +126,7 @@ def main():
 
     if pygame.font:
         font = pygame.font.Font(None, 36)
-        text = font.render("PUNG motherfucker v0.25", 1, (255,255,255))
+        text = font.render("Trollface pung. Enjoy. v0.40", 1, (255,255,255))
         textpos = text.get_rect(centerx=background.get_width()/2)
         background.blit(text, textpos)
 
