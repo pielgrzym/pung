@@ -40,7 +40,7 @@ class SpriteBall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         screen = pygame.display.get_surface()
         self.relative_to = relative_to
-        self.rect.topleft = 30, screen.get_size()[1]/2 # start pos
+        self.rect.topleft = screen.get_size()[0]/2, screen.get_size()[1]/2 # start pos
         self.move = [4,6] # movement vector
         #self.move = [15,10]
 
