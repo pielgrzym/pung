@@ -11,6 +11,7 @@ class Controller(object):
 class CPUSpinnerController(Controller):
     def __init__(self):
         self.clock = pygame.time.Clock()
+        self.is_running = True
 
     def run(self):
         """
@@ -26,18 +27,11 @@ class CPUSpinnerController(Controller):
         if isinstance(event, QuitEvent):
             self.is_running = False
 
-def InputController(Controller):
+class InputController(Controller):
     """
     Handle controller events
 
     """
-    def __init__(self, nothing):
-        """
-        docstring
-    
-        """
-    
-        print nothing
     def notify(self, event):
         if isinstance(event, TickEvent):
             for event in pygame.event.get():
