@@ -49,7 +49,7 @@ def main():
 
     pad_left = Pad(relative_to=playarea_rect)
     pad_right = Pad(relative_to=playarea_rect, align=1)
-    ball = Ball(pad_left=pad_left, relative_to=playarea_rect, background=background)
+    ball = Ball(pad_left=pad_left, pad_right=pad_right, relative_to=playarea_rect, background=background)
     allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
     clock = pygame.time.Clock()
 

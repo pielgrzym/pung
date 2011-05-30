@@ -8,6 +8,10 @@ class Pad(pygame.sprite.Sprite):
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
         self.align = align
+        if align:
+            self.rect.right = pygame.display.get_surface().get_size()[0]
+        else:
+            self.rect.left = 0
         self.relative_to = relative_to
         self.hitzones = [ 
                 pygame.Rect(self.rect.left, self.rect.top, 20, 20),
@@ -30,10 +34,11 @@ class Pad(pygame.sprite.Sprite):
         self.hitzones[1].bottom = self.rect.bottom
 
 class Ball(pygame.sprite.Sprite):
-    def __init__(self, pad_left=None, relative_to=None, background=None):
+    def __init__(self, pad_left=None, pad_right=None, relative_to=None, background=None):
         from score import Score
         pygame.sprite.Sprite.__init__(self)
         self.pad_left = pad_left
+        self.pad_right = pad_right
         self.image = pygame.image.load(os.path.join("data", "trollface.png"))
         self.image = self.image.convert_alpha()
         colorkey = self.image.get_at((0,0))
@@ -64,16 +69,23 @@ class Ball(pygame.sprite.Sprite):
     
         newpos = self.rect.move(self.move[0], self.move[1])
         if not self.relative_to.contains(newpos):
-            if self.rect.right > self.relative_to.right:
+            # right edge collision
+            if self.rect.colliderect(self.pad_right.rect):
                 self.move[0] = -self.move[0]
-                if self.move[0] > 15:
-                    self.move[0] -= 10
-                if self.move[1] > 10:
+                if self.rect.colliderect(self.pad_right.hitzones[0]):
+                    print 'right top'
                     self.move[1] -= 5
+                elif self.rect.colliderect(self.pad_right.hitzones[1]):
+                    print 'right bot'
+                    self.move[1] += 5
                 self.image = pygame.transform.flip(self.image, 1, 0)
-                self.score.point_for_player()
-                pygame.time.delay(200)
-                self.reset()
+            else:
+                if self.rect.right > self.relative_to.right:
+                    self.move[0] = -self.move[0]
+                    self.image = pygame.transform.flip(self.image, 1, 0)
+                    self.score.point_for_player()
+                    pygame.time.delay(200)
+                    self.reset()
             if self.rect.top < self.relative_to.top or self.rect.bottom > self.relative_to.bottom:
                 self.move[1] = -self.move[1]
                 if self.move[0] > 15:
