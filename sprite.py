@@ -52,7 +52,7 @@ class Ball(MVCSprite):
         self.rect = self.image.get_rect()
         self.reset()
         self.relative_to = relative_to
-        self.movement_vector = [4,6] # movement vector
+        self.movement_vector = [8,6] # movement vector
         self.score = Score(background)
         #self.move = [15,10]
 

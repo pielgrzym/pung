@@ -70,6 +70,11 @@ class View(object):
             # so the ball will bounce of extra walls etc
             self.ball.movement_vector[0] = -self.ball.movement_vector[0] 
             self.ball.image = pygame.transform.flip(self.ball.image, 1, 0)
+            ball_mid = self.ball.rect.midright[1]
+            pad = collisions[0]
+            pad_mid = pad.rect.midright[1]
+            angle_speed = (pad_mid - ball_mid)/10
+            self.ball.movement_vector[1] -= angle_speed
 
     def notify(self, event):
         """
