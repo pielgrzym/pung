@@ -12,6 +12,15 @@ class View(object):
         pygame.mouse.set_visible(0)
         self._setup_background()
 
+    def _blit_registered_surfaces(self):
+        """
+        docstring
+    
+        """
+    
+        for surface, rect in self.surfaces:
+            self.background.blit(surface, rect)
+
     def _setup_background(self):
         self.background = pygame.Surface((self.screen.get_size()))
         self.background = self.background.convert()
@@ -32,10 +41,12 @@ class View(object):
         Recieve events
     
         """
-        from events import TickEvent, RegisterSurfaceEvent, PauseEvent
+        from events import TickEvent, RegisterSurfaceEvent, PauseEvent, BlitRequestEvent
         if isinstance(event, TickEvent):
             if not self.paused:
                 self.allsprites.update()
+                if self.surfaces:
+                    self._blit_registered_surfaces()
                 self.screen.blit(self.background, (0,0))
                 self.allsprites.draw(self.screen)
                 pygame.display.flip()
@@ -43,3 +54,6 @@ class View(object):
             self.register_surface(event.surface)
         elif isinstance(event, PauseEvent):
             self.paused = not self.paused
+        elif isinstance(event, BlitRequestEvent):
+            surface = getattr(self, event.surface_name)
+            surface.blit(event.element, event.element_rect)

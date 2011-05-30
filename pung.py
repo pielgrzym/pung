@@ -22,7 +22,7 @@ def game_over(background):
 
 def main():
     """
-    docstring
+    Behold! Here happends the Main Shit. 
 
     """
     pygame.init()
@@ -39,7 +39,6 @@ def main():
     ball = Ball(pad_left=pad_left, pad_right=pad_right, relative_to=main_view.playarea_rect, background=main_view.background)
     main_view.allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
     # register them
-    print input_controller, loop, main_view
     event_manager.register_listener(input_controller)
     event_manager.register_listener(loop)
     event_manager.register_listener(main_view)

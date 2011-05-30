@@ -16,7 +16,7 @@ class QuitEvent(Event):
 
 class RegisterSurfaceEvent(Event):
     """
-    Register surface for direct blitting into screen
+    Register surface for constant re-blitting into screen
     """
     def __init__(self, surface):
         if not isinstance(surface, list) or len(surface) < 2:
@@ -24,11 +24,14 @@ class RegisterSurfaceEvent(Event):
         self.surface = surface
         self.name = "Register surface"
 
-class InputEvent(Event):
-    def __init__(self, event):
+class BlitRequestEvent(Event):
+    def __init__(self, surface_name, element, element_rect):
         """
-        docstring
+        Used to call View and blit an element into surface accessible only from
+        view
     
         """
     
-        self.event = event
+        self.surface_name = surface_name
+        self.element = element
+        self.element_rect = element_rect
