@@ -1,5 +1,6 @@
 import pygame, os
 from event_manager import event_manager
+import events
 
 class View(object):
     def __init__(self, size=(800,600)):
@@ -9,6 +10,15 @@ class View(object):
         self._setup_screen(size)
         self._setup_background()
         self._setup_sprites()
+        self._setup_score()
+
+    def _setup_score(self):
+        """
+        Sets up the score object
+    
+        """
+        from score import Score
+        self.score = Score(self.background)
 
     def _setup_screen(self, size):
         """
@@ -27,7 +37,7 @@ class View(object):
         from sprite import Pad, Ball
         self.pad_left = Pad(relative_to=self.playarea_rect)
         self.pad_right = Pad(relative_to=self.playarea_rect, align=1)
-        self.ball = Ball(pad_left=self.pad_left, pad_right=self.pad_right, relative_to=self.playarea_rect, background=self.background)
+        self.ball = Ball(relative_to=self.playarea_rect)
         self.allsprites = pygame.sprite.RenderUpdates((
                     self.pad_left,
                     self.pad_right,
@@ -81,8 +91,7 @@ class View(object):
         Recieve events
     
         """
-        from events import TickEvent, RegisterSurfaceEvent, PauseEvent, BlitRequestEvent
-        if isinstance(event, TickEvent):
+        if isinstance(event, events.TickEvent):
             if not self.paused:
                 self.handle_collisions()
                 self.allsprites.update()
@@ -91,10 +100,12 @@ class View(object):
                 self.screen.blit(self.background, (0,0))
                 self.allsprites.draw(self.screen)
                 pygame.display.flip()
-        elif isinstance(event, RegisterSurfaceEvent):
+        elif isinstance(event, events.RegisterSurfaceEvent):
             self.register_surface(event.surface)
-        elif isinstance(event, PauseEvent):
+        elif isinstance(event, events.PauseEvent):
             self.paused = not self.paused
-        elif isinstance(event, BlitRequestEvent):
+        elif isinstance(event, events.BlitRequestEvent):
             surface = getattr(self, event.surface_name)
             surface.blit(event.element, event.element_rect)
+        elif isinstance(event, events.ModifyScoreEvent):
+            self.score.modify_score(event)

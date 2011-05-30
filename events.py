@@ -35,3 +35,12 @@ class BlitRequestEvent(Event):
         self.surface_name = surface_name
         self.element = element
         self.element_rect = element_rect
+
+class ModifyScoreEvent(Event):
+    def __init__(self, player=0, ai=0):
+        """
+        Adds some score
+    
+        """
+        self.ai = ai
+        self.player = player

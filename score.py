@@ -79,6 +79,19 @@ class Score(object):
             elif self.ai - self.player > 1:
                 print 'ai won'
 
+    def modify_score(self, event):
+        """
+        Modify score based on event
+    
+        """
+    
+        if event.ai:
+            self.point_for_ai()
+        elif event.player:
+            self.point_for_player()
+        else:
+            raise ValueError
+
     def point_for_player(self):
         """
         Increment score for player

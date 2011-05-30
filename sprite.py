@@ -40,11 +40,8 @@ class Pad(MVCSprite):
         self.hitzones[1].bottom = self.rect.bottom
 
 class Ball(MVCSprite):
-    def __init__(self, pad_left=None, pad_right=None, relative_to=None, background=None):
-        from score import Score
+    def __init__(self, relative_to=None):
         pygame.sprite.Sprite.__init__(self)
-        self.pad_left = pad_left
-        self.pad_right = pad_right
         self.image = pygame.image.load(os.path.join("data", "trollface.png"))
         self.image = self.image.convert_alpha()
         colorkey = self.image.get_at((0,0))
@@ -52,12 +49,10 @@ class Ball(MVCSprite):
         self.rect = self.image.get_rect()
         self.reset()
         self.relative_to = relative_to
-        self.movement_vector = [8,6] # movement vector
-        self.score = Score(background)
-        #self.move = [15,10]
+        self.movement_vector = [8,6] # base movement vector
 
     def update(self):
-        self._fly() # leć, kurwa, leć!
+        self._fly()
 
     def reset(self):
         """
@@ -72,14 +67,14 @@ class Ball(MVCSprite):
         Latanie jakie jest, każdy widzi
     
         """
-    
+        from events import ModifyScoreEvent
         newpos = self.rect.move(self.movement_vector[0], self.movement_vector[1])
         if not self.relative_to.contains(newpos):
             # right edge
             if self.rect.right > self.relative_to.right:
                 self.movement_vector[0] = -self.movement_vector[0]
                 self.image = pygame.transform.flip(self.image, 1, 0)
-                self.score.point_for_player()
+                self.event_manager.post(ModifyScoreEvent(player=1))
                 pygame.time.delay(200)
                 self.reset()
             # top/bottom edge
@@ -93,7 +88,7 @@ class Ball(MVCSprite):
             if self.rect.left < self.relative_to.left:
                 self.movement_vector[0] = -self.movement_vector[0]
                 #self.kill() # die :]
-                self.score.point_for_ai()
+                self.event_manager.post(ModifyScoreEvent(ai=1))
                 pygame.time.delay(200)
                 self.reset()
             newpos = self.rect.move((self.movement_vector[0], self.movement_vector[1]))
