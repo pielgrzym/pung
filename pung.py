@@ -29,7 +29,7 @@ def main():
     size = width, height = 800, 600
     # initialize controllers
     input_controller = controllers.InputController()
-    spinner = controllers.CPUSpinnerController()
+    loop = controllers.LoopController()
     # initialize views
     main_view = View(size=size)
     screen = main_view.screen
@@ -50,12 +50,12 @@ def main():
     ball = Ball(pad_left=pad_left, pad_right=pad_right, relative_to=playarea_rect, background=background)
     main_view.allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
     # register them
-    print input_controller, spinner, main_view
+    print input_controller, loop, main_view
     event_manager.register_listener(input_controller)
-    event_manager.register_listener(spinner)
+    event_manager.register_listener(loop)
     event_manager.register_listener(main_view)
     # start master loop
-    spinner.run()
+    loop.run()
 
 
     #if pygame.font:

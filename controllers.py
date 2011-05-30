@@ -8,7 +8,7 @@ class Controller(object):
     def notify(self, event):
         raise NotImplementedError
 
-class CPUSpinnerController(Controller):
+class LoopController(Controller):
     def __init__(self):
         self.clock = pygame.time.Clock()
         self.is_running = True
@@ -18,9 +18,9 @@ class CPUSpinnerController(Controller):
         Main cpu loop
     
         """
+        event = TickEvent()
         while self.is_running:
             self.clock.tick(60)
-            event = TickEvent()
             self.event_manager.post(event)
 
     def notify(self, event):
