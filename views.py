@@ -25,10 +25,15 @@ class View(object):
     
         """
         from sprite import Pad, Ball
-        pad_left = Pad(relative_to=self.playarea_rect)
-        pad_right = Pad(relative_to=self.playarea_rect, align=1)
-        ball = Ball(pad_left=pad_left, pad_right=pad_right, relative_to=self.playarea_rect, background=self.background)
-        self.allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
+        self.pad_left = Pad(relative_to=self.playarea_rect)
+        self.pad_right = Pad(relative_to=self.playarea_rect, align=1)
+        self.ball = Ball(pad_left=self.pad_left, pad_right=self.pad_right, relative_to=self.playarea_rect, background=self.background)
+        self.allsprites = pygame.sprite.RenderUpdates((
+                    self.pad_left,
+                    self.pad_right,
+                    self.ball
+                    ))
+        self.pads = pygame.sprite.Group((self.pad_left, self.pad_right))
 
     def _blit_registered_surfaces(self):
         """
@@ -54,6 +59,18 @@ class View(object):
     def register_surface(self, surface):
         self.surfaces.append(surface)
 
+    def handle_collisions(self):
+        """
+        Detect ball - sprite collisions and handle them
+
+        """
+        collisions = pygame.sprite.spritecollide(self.ball, self.pads, False)
+        if len(collisions):
+            # in the future there will be generic collision test
+            # so the ball will bounce of extra walls etc
+            self.ball.movement_vector[0] = -self.ball.movement_vector[0] 
+            self.ball.image = pygame.transform.flip(self.ball.image, 1, 0)
+
     def notify(self, event):
         """
         Recieve events
@@ -62,6 +79,7 @@ class View(object):
         from events import TickEvent, RegisterSurfaceEvent, PauseEvent, BlitRequestEvent
         if isinstance(event, TickEvent):
             if not self.paused:
+                self.handle_collisions()
                 self.allsprites.update()
                 if self.surfaces:
                     self._blit_registered_surfaces()

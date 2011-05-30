@@ -15,6 +15,7 @@ class Pad(MVCSprite):
         self.align = align
         if align:
             self.rect.right = pygame.display.get_surface().get_size()[0]
+            self.image = pygame.transform.flip(self.image, 1, 0)
         else:
             self.rect.left = 0
         self.relative_to = relative_to
@@ -74,46 +75,27 @@ class Ball(MVCSprite):
     
         newpos = self.rect.move(self.movement_vector[0], self.movement_vector[1])
         if not self.relative_to.contains(newpos):
-            # right edge collision
-            if self.rect.colliderect(self.pad_right.rect):
+            # right edge
+            if self.rect.right > self.relative_to.right:
                 self.movement_vector[0] = -self.movement_vector[0]
-                if self.rect.colliderect(self.pad_right.hitzones[0]):
-                    print 'right top'
-                    self.movement_vector[1] -= 5
-                elif self.rect.colliderect(self.pad_right.hitzones[1]):
-                    print 'right bot'
-                    self.movement_vector[1] += 5
                 self.image = pygame.transform.flip(self.image, 1, 0)
-            else:
-                if self.rect.right > self.relative_to.right:
-                    self.movement_vector[0] = -self.movement_vector[0]
-                    self.image = pygame.transform.flip(self.image, 1, 0)
-                    self.score.point_for_player()
-                    pygame.time.delay(200)
-                    self.reset()
+                self.score.point_for_player()
+                pygame.time.delay(200)
+                self.reset()
+            # top/bottom edge
             if self.rect.top < self.relative_to.top or self.rect.bottom > self.relative_to.bottom:
                 self.movement_vector[1] = -self.movement_vector[1]
                 if self.movement_vector[0] > 15:
                     self.movement_vector[0] -= 10
                 if self.movement_vector[1] > 10:
                     self.movement_vector[1] -= 5
-            #if self.pad_left.rect.colliderect(self.rect):
-            if self.rect.colliderect(self.pad_left.rect):
+            # left edge
+            if self.rect.left < self.relative_to.left:
                 self.movement_vector[0] = -self.movement_vector[0]
-                if self.rect.colliderect(self.pad_left.hitzones[0]):
-                    print 'top'
-                    self.movement_vector[1] -= 5
-                elif self.rect.colliderect(self.pad_left.hitzones[1]):
-                    print 'bot'
-                    self.movement_vector[1] += 5
-                self.image = pygame.transform.flip(self.image, 1, 0)
-            else:
-                if self.rect.left < self.relative_to.left:
-                    self.movement_vector[0] = -self.movement_vector[0]
-                    #self.kill() # die :]
-                    self.score.point_for_ai()
-                    pygame.time.delay(200)
-                    self.reset()
+                #self.kill() # die :]
+                self.score.point_for_ai()
+                pygame.time.delay(200)
+                self.reset()
             newpos = self.rect.move((self.movement_vector[0], self.movement_vector[1]))
         self.rect = newpos
 
