@@ -21,7 +21,7 @@ def game_over(background):
 
 def main():
     """
-    Behold! Here happends the Main Shit. 
+    Behold! Here happens The Main Shit. 
 
     """
     pygame.init()
