@@ -3,15 +3,21 @@ from event_manager import event_manager
 
 class View(object):
     def __init__(self, size=(800,600)):
-        self.allsprites = None
-        self.surfaces = []
         self.event_manager = event_manager
-        self.screen = pygame.display.set_mode(size)
+        self.surfaces = []
         self.paused = False
-        pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
-        pygame.mouse.set_visible(0)
+        self._setup_screen(size)
         self._setup_background()
         self._setup_sprites()
+
+    def _setup_screen(self, size):
+        """
+        Sets up the screen
+    
+        """
+        self.screen = pygame.display.set_mode(size)
+        pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
+        pygame.mouse.set_visible(0)
 
     def _setup_sprites(self):
         """
@@ -26,7 +32,7 @@ class View(object):
 
     def _blit_registered_surfaces(self):
         """
-        docstring
+        Blit registered surfaces - called on each tick
     
         """
     
