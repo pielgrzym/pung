@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import pygame, os
+from event_manager import event_manager
 
-class Pad(pygame.sprite.Sprite):
+class MVCSprite(pygame.sprite.Sprite):
+    event_manager = event_manager
+
+
+class Pad(MVCSprite):
     def __init__(self, relative_to=None, align=0):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join("data","pad.png"))
@@ -33,7 +38,7 @@ class Pad(pygame.sprite.Sprite):
         self.hitzones[0].top = self.rect.top
         self.hitzones[1].bottom = self.rect.bottom
 
-class Ball(pygame.sprite.Sprite):
+class Ball(MVCSprite):
     def __init__(self, pad_left=None, pad_right=None, relative_to=None, background=None):
         from score import Score
         pygame.sprite.Sprite.__init__(self)

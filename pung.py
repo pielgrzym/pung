@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import pygame, os
-from sprite import Pad, Ball
+import pygame
+import controllers
+import views
+from event_manager import event_manager
 
 def game_over(background):
     """
@@ -19,56 +21,23 @@ def game_over(background):
 
 def main():
     """
-    docstring
+    Behold! Here happens The Main Shit. 
 
     """
     pygame.init()
-    size = width, height = 800, 600
+    size = 800, 600
+    # initialize controllers
+    input_controller = controllers.InputController()
+    loop = controllers.LoopController()
+    event_manager.register_listener(input_controller)
+    event_manager.register_listener(loop)
 
-    screen = pygame.display.set_mode(size)
-    pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
-    pygame.mouse.set_visible(0)
-    background = pygame.Surface((screen.get_size()))
-    background = background.convert()
-    background.fill((0,0,0))
+    # initialize views
+    main_view = views.View(size=size)
+    event_manager.register_listener(main_view)
 
-    #if pygame.font:
-        #font = pygame.font.Font(None, 36)
-        #text = font.render("Trollface pung. Enjoy. v0.40", 1, (255,255,255))
-        #textpos = text.get_rect(centerx=background.get_width()/2)
-        #background.blit(text, textpos)
-
-    screen.blit(background, (0,0))
-    pygame.display.flip()
-
-    playarea = pygame.image.load(os.path.join("data", "playfield.png"))
-    playarea.convert_alpha()
-    playarea_rect = playarea.get_rect()
-    playarea_rect.top = 50
-    background.blit(playarea, playarea_rect)
-
-    pad_left = Pad(relative_to=playarea_rect)
-    pad_right = Pad(relative_to=playarea_rect, align=1)
-    ball = Ball(pad_left=pad_left, pad_right=pad_right, relative_to=playarea_rect, background=background)
-    allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
-    clock = pygame.time.Clock()
-
-    while 1:
-        clock.tick(60)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                return
-        if ball in allsprites:
-            allsprites.update()
-            screen.blit(ball.score.avatars, ball.score.avatars_rect)
-            screen.blit(background, (0, 0))
-            allsprites.draw(screen)
-            pygame.display.flip()
-        else:
-            game_over(background)
-            pygame.display.flip()
+    # start master loop
+    loop.run()
 
     pygame.quit()
 
