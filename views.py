@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 from event_manager import event_manager
 
 class View(object):
@@ -10,6 +10,19 @@ class View(object):
         self.paused = False
         pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
         pygame.mouse.set_visible(0)
+        self._setup_background()
+
+    def _setup_background(self):
+        self.background = pygame.Surface((self.screen.get_size()))
+        self.background = self.background.convert()
+        self.background.fill((0,0,0))
+
+        self.playarea = pygame.image.load(os.path.join("data", "playfield.png"))
+        self.playarea.convert_alpha()
+        self.playarea_rect = self.playarea.get_rect()
+        self.playarea_rect.top = 50
+        self.background.blit(self.playarea, self.playarea_rect)
+
 
     def register_surface(self, surface):
         self.surfaces.append(surface)

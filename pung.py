@@ -32,22 +32,11 @@ def main():
     loop = controllers.LoopController()
     # initialize views
     main_view = View(size=size)
-    screen = main_view.screen
-    background = pygame.Surface((screen.get_size()))
-    background = background.convert()
-    background.fill((0,0,0))
 
-    playarea = pygame.image.load(os.path.join("data", "playfield.png"))
-    playarea.convert_alpha()
-    playarea_rect = playarea.get_rect()
-    playarea_rect.top = 50
-    background.blit(playarea, playarea_rect)
 
-    main_view.background = background
-
-    pad_left = Pad(relative_to=playarea_rect)
-    pad_right = Pad(relative_to=playarea_rect, align=1)
-    ball = Ball(pad_left=pad_left, pad_right=pad_right, relative_to=playarea_rect, background=background)
+    pad_left = Pad(relative_to=main_view.playarea_rect)
+    pad_right = Pad(relative_to=main_view.playarea_rect, align=1)
+    ball = Ball(pad_left=pad_left, pad_right=pad_right, relative_to=main_view.playarea_rect, background=main_view.background)
     main_view.allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
     # register them
     print input_controller, loop, main_view
