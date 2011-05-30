@@ -11,6 +11,18 @@ class View(object):
         pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
         pygame.mouse.set_visible(0)
         self._setup_background()
+        self._setup_sprites()
+
+    def _setup_sprites(self):
+        """
+        Initializes all sprites
+    
+        """
+        from sprite import Pad, Ball
+        pad_left = Pad(relative_to=self.playarea_rect)
+        pad_right = Pad(relative_to=self.playarea_rect, align=1)
+        ball = Ball(pad_left=pad_left, pad_right=pad_right, relative_to=self.playarea_rect, background=self.background)
+        self.allsprites = pygame.sprite.RenderUpdates((pad_left,pad_right,ball))
 
     def _blit_registered_surfaces(self):
         """
