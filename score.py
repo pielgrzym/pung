@@ -30,7 +30,7 @@ class Score(object):
 
     def erase_player_score(self):
         """
-        Draws text with player score
+        Removes text with player score
     
         """
         background = self.background
@@ -39,7 +39,7 @@ class Score(object):
 
     def draw_ai_score(self):
         """
-        Draws text with player score
+        Draws text with ai score
     
         """
         background = self.background
@@ -52,7 +52,7 @@ class Score(object):
 
     def erase_ai_score(self):
         """
-        Draws text with player score
+        Removes text with ai score
     
         """
         background = self.background
@@ -61,7 +61,7 @@ class Score(object):
 
     def reset(self):
         """
-        Reset both score
+        Reset all scores
     
         """
         self.player = 0
@@ -81,7 +81,7 @@ class Score(object):
 
     def point_for_player(self):
         """
-        Increment score
+        Increment score for player
     
         """
         self.erase_player_score()
@@ -91,7 +91,7 @@ class Score(object):
     
     def point_for_ai(self):
         """
-        Increment score
+        Increment score for ai
     
         """
         self.erase_ai_score()

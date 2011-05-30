@@ -39,15 +39,22 @@ class Ball(pygame.sprite.Sprite):
         colorkey = self.image.get_at((0,0))
         self.image.set_colorkey(colorkey, pygame.RLEACCEL)
         self.rect = self.image.get_rect()
-        screen = pygame.display.get_surface()
+        self.reset()
         self.relative_to = relative_to
-        self.rect.topleft = screen.get_size()[0]/2, screen.get_size()[1]/2 # start pos
         self.move = [4,6] # movement vector
         self.score = Score(background)
         #self.move = [15,10]
 
     def update(self):
         self._fly() # leć, kurwa, leć!
+
+    def reset(self):
+        """
+        Sets the ball in right place :]
+    
+        """
+        screen = pygame.display.get_surface()
+        self.rect.topleft = screen.get_size()[0]/2, screen.get_size()[1]/2 # start pos
 
     def _fly(self):
         """
@@ -65,6 +72,8 @@ class Ball(pygame.sprite.Sprite):
                     self.move[1] -= 5
                 self.image = pygame.transform.flip(self.image, 1, 0)
                 self.score.point_for_player()
+                pygame.time.delay(200)
+                self.reset()
             if self.rect.top < self.relative_to.top or self.rect.bottom > self.relative_to.bottom:
                 self.move[1] = -self.move[1]
                 if self.move[0] > 15:
@@ -86,6 +95,8 @@ class Ball(pygame.sprite.Sprite):
                     self.move[0] = -self.move[0]
                     #self.kill() # die :]
                     self.score.point_for_ai()
+                    pygame.time.delay(200)
+                    self.reset()
             newpos = self.rect.move((self.move[0], self.move[1]))
         self.rect = newpos
 
