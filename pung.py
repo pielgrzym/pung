@@ -32,11 +32,11 @@ def main():
     background = background.convert()
     background.fill((0,0,0))
 
-    if pygame.font:
-        font = pygame.font.Font(None, 36)
-        text = font.render("Trollface pung. Enjoy. v0.40", 1, (255,255,255))
-        textpos = text.get_rect(centerx=background.get_width()/2)
-        background.blit(text, textpos)
+    #if pygame.font:
+        #font = pygame.font.Font(None, 36)
+        #text = font.render("Trollface pung. Enjoy. v0.40", 1, (255,255,255))
+        #textpos = text.get_rect(centerx=background.get_width()/2)
+        #background.blit(text, textpos)
 
     screen.blit(background, (0,0))
     pygame.display.flip()

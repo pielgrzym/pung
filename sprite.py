@@ -1,53 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame, os
 
-class Score(object):
-    def __init__(self, background=None):
-        self.player = 0
-        self.ai = 0
-        self.avatars = pygame.image.load(os.path.join("data","score.png"))
-        self.avatars.convert_alpha()
-        self.avatars_rect = self.avatars.get_rect()
-        screen = pygame.display.get_surface()
-        self.avatars_rect.midtop = [screen.get_size()[0]/2, 0]
-        background.blit(self.avatars, self.avatars_rect)
-
-    def reset(self):
-        """
-        Reset both score
-    
-        """
-        self.player = 0
-        self.ai = 0
-
-    def __check_win(self):
-        """
-        Checks if one of the players won
-    
-        """
-    
-        if self.player != self.ai:
-            if self.player - self.ai > 1:
-                print 'player won'
-            elif self.ai - self.player > 1:
-                print 'ai won'
-
-    def point_for_player(self):
-        """
-        Increment score
-    
-        """
-        self.player += 1
-        self.__check_win()
-    
-    def point_for_ai(self):
-        """
-        Increment score
-    
-        """
-        self.ai += 1
-        self.__check_win()
-
 class Pad(pygame.sprite.Sprite):
     def __init__(self, relative_to=None, align=0):
         pygame.sprite.Sprite.__init__(self)
@@ -78,6 +31,7 @@ class Pad(pygame.sprite.Sprite):
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self, pad_left=None, relative_to=None, background=None):
+        from score import Score
         pygame.sprite.Sprite.__init__(self)
         self.pad_left = pad_left
         self.image = pygame.image.load(os.path.join("data", "trollface.png"))
@@ -110,6 +64,7 @@ class Ball(pygame.sprite.Sprite):
                 if self.move[1] > 10:
                     self.move[1] -= 5
                 self.image = pygame.transform.flip(self.image, 1, 0)
+                self.score.point_for_player()
             if self.rect.top < self.relative_to.top or self.rect.bottom > self.relative_to.bottom:
                 self.move[1] = -self.move[1]
                 if self.move[0] > 15:
@@ -128,23 +83,9 @@ class Ball(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(self.image, 1, 0)
             else:
                 if self.rect.left < self.relative_to.left:
-                    # begin fadeout
-                    from pygame import surfarray
-                    import numpy as N
-                    rgbarray = surfarray.array3d(self.image)
-                    src = N.array(rgbarray)
-                    dest = N.zeros(rgbarray.shape)
-                    dest[:] = 0, 0, 0
-                    diff = (dest - src) * 0.50
-                    if surfarray.get_arraytype() == 'numpy':
-                        xfade = src + diff.astype(N.uint)
-                    else:
-                        xfade = src + diff.astype(N.Int)
-                    surfarray.blit_array(self.image, xfade)
-                    pygame.display.flip()
-                    # end fadeout
-                    self.move = [0,0] # stop
-                    self.kill() # die :]
+                    self.move[0] = -self.move[0]
+                    #self.kill() # die :]
+                    self.score.point_for_ai()
             newpos = self.rect.move((self.move[0], self.move[1]))
         self.rect = newpos
 
