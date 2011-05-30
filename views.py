@@ -65,9 +65,26 @@ class View(object):
         self.playarea_rect.top = 50
         self.background.blit(self.playarea, self.playarea_rect)
 
-
     def register_surface(self, surface):
         self.surfaces.append(surface)
+
+    def game_over(self, win=True):
+        """
+        What do you think it does??
+
+        """
+        self.ball.kill()
+        if pygame.font:
+            font = pygame.font.Font(None, 128)
+            if win:
+                text = font.render("WIN!", 1, (15,255,15))
+            else:
+                text = font.render("FAIL!", 1, (255,15,15))
+            textpos = text.get_rect(centerx=self.background.get_width()/2,
+                    centery=self.background.get_height()/2)
+            self.background.blit(text, textpos)
+            pygame.display.flip()
+            self.event_manager.unregister_listener(self)
 
     def handle_collisions(self):
         """
@@ -109,3 +126,5 @@ class View(object):
             surface.blit(event.element, event.element_rect)
         elif isinstance(event, events.ModifyScoreEvent):
             self.score.modify_score(event)
+        elif isinstance(event, events.GameOverEvent):
+            self.game_over(event.win)

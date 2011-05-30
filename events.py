@@ -44,3 +44,7 @@ class ModifyScoreEvent(Event):
         """
         self.ai = ai
         self.player = player
+
+class GameOverEvent(Event):
+    def __init__(self, win=True):
+        self.win = win

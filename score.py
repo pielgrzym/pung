@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 import pygame, os
+import events
+from event_manager import event_manager
 
 class Score(object):
     def __init__(self, background=None):
+        self.event_manager = event_manager
         self.player = 0
         self.ai = 0
         self.avatars = pygame.image.load(os.path.join("data","score.png"))
@@ -75,9 +78,9 @@ class Score(object):
     
         if self.player != self.ai:
             if self.player - self.ai > 1:
-                print 'player won'
+                self.event_manager.post(events.GameOverEvent(win=True))
             elif self.ai - self.player > 1:
-                print 'ai won'
+                self.event_manager.post(events.GameOverEvent(win=False))
 
     def modify_score(self, event):
         """

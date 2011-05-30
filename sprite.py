@@ -64,7 +64,8 @@ class Ball(MVCSprite):
 
     def _fly(self):
         """
-        Latanie jakie jest, każdy widzi
+        This function only checks collisions with playarea_rect
+        and if they occur with left/right edge it calls score events
     
         """
         from events import ModifyScoreEvent
