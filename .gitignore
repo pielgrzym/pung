@@ -1,2 +1,3 @@
 pung.vim
 .ropeproject
+*.pyc
