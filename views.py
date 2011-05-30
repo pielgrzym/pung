@@ -28,7 +28,7 @@ class View(object):
         if isinstance(event, TickEvent):
             self.allsprites.update()
             self.surfaces_update()
-            self.allsprites.draw()
+            self.allsprites.draw(self.screen)
             pygame.display.flip()
         elif isinstance(event, RegisterSurface):
             self.register_surface(event.surface)
