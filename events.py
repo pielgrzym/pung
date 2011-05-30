@@ -5,13 +5,16 @@ class Event(object):
     def __init__(self):
         self.name = "Generic Event"
 
+class PauseEvent(Event):
+    pass
+
 class TickEvent(Event):
     pass
 
 class QuitEvent(Event):
     pass
 
-class RegisterSurface(Event):
+class RegisterSurfaceEvent(Event):
     """
     Register surface for direct blitting into screen
     """

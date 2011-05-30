@@ -1,6 +1,6 @@
 import pygame
 from event_manager import event_manager
-from events import TickEvent, QuitEvent
+from events import TickEvent, QuitEvent, PauseEvent
 
 class Controller(object):
     event_manager = event_manager
@@ -39,3 +39,5 @@ class InputController(Controller):
                     self.event_manager.post(QuitEvent())
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.event_manager.post(QuitEvent())
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                    self.event_manager.post(PauseEvent())
