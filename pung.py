@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import pygame, os
-from sprite import Pad, Ball
+import pygame
 import controllers
-from views import View
+import views
 from event_manager import event_manager
 
 def game_over(background):
@@ -34,7 +33,7 @@ def main():
     event_manager.register_listener(loop)
 
     # initialize views
-    main_view = View(size=size)
+    main_view = views.View(size=size)
     event_manager.register_listener(main_view)
 
     # start master loop
