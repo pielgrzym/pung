@@ -11,14 +11,6 @@ class View(object):
         pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
         pygame.mouse.set_visible(0)
 
-    def surfaces_update(self):
-        """
-        Blits every surface
-    
-        """
-        for surface, rect in self.surfaces:
-            self.screen.blit(surface, rect)
-
     def register_surface(self, surface):
         self.surfaces.append(surface)
 
@@ -31,7 +23,7 @@ class View(object):
         if isinstance(event, TickEvent):
             if not self.paused:
                 self.allsprites.update()
-                self.surfaces_update()
+                self.screen.blit(self.background, (0,0))
                 self.allsprites.draw(self.screen)
                 pygame.display.flip()
         elif isinstance(event, RegisterSurfaceEvent):

@@ -41,9 +41,9 @@ def main():
     playarea.convert_alpha()
     playarea_rect = playarea.get_rect()
     playarea_rect.top = 50
+    background.blit(playarea, playarea_rect)
 
-    main_view.register_surface((background, (0,0)))
-    main_view.register_surface((playarea, playarea_rect))
+    main_view.background = background
 
     pad_left = Pad(relative_to=playarea_rect)
     pad_right = Pad(relative_to=playarea_rect, align=1)
