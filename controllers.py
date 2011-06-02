@@ -58,11 +58,18 @@ class AIController(Controller):
 
         """
 
-        if isinstance(event, events.TickEvent):
-            pass
+        if isinstance(event, events.PadMoveEvent):
+            if event.right:
+                self.last_pos = event.coords[1]
         elif isinstance(event, events.BallMoveEvent):
             if event.x > 400:
-                pos = [0, event.y]
+                if self.last_pos == event.y:
+                    move = 0
+                elif self.last_pos > event.y:
+                    move = -5
+                else:
+                    move = 5
+                pos = [0, self.last_pos + move]
                 self.event_manager.post(
                         events.MovePadEvent(pos, False)
                         )

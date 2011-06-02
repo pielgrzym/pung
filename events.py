@@ -63,3 +63,14 @@ class BallMoveEvent(Event):
 
         self.coords = coords
         self.x, self.y = coords
+
+class PadMoveEvent(Event):
+    def __init__(self, coords, right=0):
+        """
+        Ball movement event - for ai to determine next move
+
+        """
+
+        self.coords = coords
+        self.x, self.y = coords
+        self.right = right

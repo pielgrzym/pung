@@ -8,14 +8,14 @@ class MVCSprite(pygame.sprite.Sprite):
 
 
 class Pad(MVCSprite):
-    def __init__(self, relative_to=None, align=0):
+    def __init__(self, relative_to=None, align=0, pos=300):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join("data","pad.png"))
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
         self.relative_to = relative_to
         self._align(align) # align the paddle
-        self.pos = 0
+        self.pos = pos
 
     def _align(self, align):
         """
@@ -29,6 +29,7 @@ class Pad(MVCSprite):
         else: # aligned to the left
             self.border = self.relative_to.left
             self.rect.left = 0
+        self.align = align
 
     def _playarea_collisions(self):
         """
@@ -44,6 +45,9 @@ class Pad(MVCSprite):
     def update(self):
         self.rect.midleft = [self.border, self.pos]
         self._playarea_collisions()
+        self.event_manager.post(
+                events.PadMoveEvent(self.rect.center, self.align)
+                )
 
 class Ball(MVCSprite):
     def __init__(self, relative_to=None):
