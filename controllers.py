@@ -43,7 +43,7 @@ class PlayerController(Controller):
                     self.event_manager.post(events.PauseEvent())
             # move the left pad with mouse
             self.event_manager.post(
-                    events.MovePadEvent(pygame.mouse.get_pos(), True)
+                    events.ControlPadEvent(pygame.mouse.get_pos(), True)
                     )
 
 class AIController(Controller):
@@ -66,5 +66,5 @@ class AIController(Controller):
                 delta = event.y - self.last_pos or 1
                 pos = [0, self.last_pos + delta/17]
                 self.event_manager.post(
-                        events.MovePadEvent(pos, False)
+                        events.ControlPadEvent(pos, False)
                         )

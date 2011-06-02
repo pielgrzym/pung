@@ -49,7 +49,7 @@ class GameOverEvent(Event):
     def __init__(self, win=True):
         self.win = win
 
-class MovePadEvent(Event):
+class ControlPadEvent(Event):
     def __init__(self, pos, left=False):
         self.left = left
         self.pos = pos[1]

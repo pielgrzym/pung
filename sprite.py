@@ -6,7 +6,6 @@ from event_manager import event_manager
 class MVCSprite(pygame.sprite.Sprite):
     event_manager = event_manager
 
-
 class Pad(MVCSprite):
     def __init__(self, relative_to=None, align=0, pos=300):
         pygame.sprite.Sprite.__init__(self)
@@ -15,7 +14,7 @@ class Pad(MVCSprite):
         self.rect = self.image.get_rect()
         self.relative_to = relative_to
         self._align(align) # align the paddle
-        self.pos = pos
+        self.pos = pos # initial pos
 
     def _align(self, align):
         """
