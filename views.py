@@ -75,14 +75,14 @@ class View(object):
         """
         self.ball.kill()
         if pygame.font:
-            font = pygame.font.Font(None, 128)
             if win:
-                text = font.render("WIN!", 1, (15,255,15))
+                image = pygame.image.load(os.path.join("data", "fuckyea.jpg"))
             else:
-                text = font.render("FAIL!", 1, (255,15,15))
-            textpos = text.get_rect(centerx=self.background.get_width()/2,
-                    centery=self.background.get_height()/2)
-            self.background.blit(text, textpos)
+                image = pygame.image.load(os.path.join("data", "fuuu.jpg"))
+            image = image.convert()
+            image_rect = image.get_rect()
+            image_rect.center = [400, 300]
+            self.background.blit(image, image_rect)
             pygame.display.flip()
             self.event_manager.unregister_listener(self)
 
