@@ -58,7 +58,7 @@ class Ball(MVCSprite):
         self.rect = self.image.get_rect()
         self.reset()
         self.relative_to = relative_to
-        self.movement_vector = [8,6] # base movement vector
+        self.movement_vector = [10,10] # base movement vector
 
     def update(self):
         coords = self.rect.center
@@ -72,6 +72,7 @@ class Ball(MVCSprite):
         """
         screen = pygame.display.get_surface()
         self.rect.topleft = screen.get_size()[0]/2, screen.get_size()[1]/2 # start pos
+        self.movement_vector = [10,10]
 
     def _fly(self):
         """

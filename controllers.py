@@ -64,7 +64,7 @@ class AIController(Controller):
         elif isinstance(event, events.BallMoveEvent):
             if event.x > 400:
                 delta = event.y - self.last_pos or 1
-                pos = [0, self.last_pos + delta/17]
+                pos = [0, self.last_pos + delta/14]
                 self.event_manager.post(
                         events.ControlPadEvent(pos, False)
                         )
