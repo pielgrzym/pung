@@ -1,6 +1,6 @@
 import pygame
 from event_manager import event_manager
-from events import TickEvent, QuitEvent, PauseEvent
+import events
 
 class Controller(object):
     event_manager = event_manager
@@ -18,13 +18,13 @@ class LoopController(Controller):
         Main cpu loop
     
         """
-        event = TickEvent()
+        event = events.TickEvent()
         while self.is_running:
             self.clock.tick(60)
             self.event_manager.post(event)
 
     def notify(self, event):
-        if isinstance(event, QuitEvent):
+        if isinstance(event, events.QuitEvent):
             self.is_running = False
 
 class InputController(Controller):
@@ -33,11 +33,12 @@ class InputController(Controller):
 
     """
     def notify(self, e):
-        if isinstance(e, TickEvent):
+        if isinstance(e, events.TickEvent):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.event_manager.post(QuitEvent())
+                    self.event_manager.post(events.QuitEvent())
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    self.event_manager.post(QuitEvent())
+                    self.event_manager.post(events.QuitEvent())
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
-                    self.event_manager.post(PauseEvent())
+                    self.event_manager.post(events.PauseEvent())
+            self.event_manager.post(events.MovePadEvent(pygame.mouse.get_pos()))

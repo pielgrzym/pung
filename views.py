@@ -128,3 +128,6 @@ class View(object):
             self.score.modify_score(event)
         elif isinstance(event, events.GameOverEvent):
             self.game_over(event.win)
+        elif isinstance(event, events.MovePadEvent):
+            self.pad_left.pos =  event.pos
+            self.pad_right.pos =  event.pos

@@ -48,3 +48,7 @@ class ModifyScoreEvent(Event):
 class GameOverEvent(Event):
     def __init__(self, win=True):
         self.win = win
+
+class MovePadEvent(Event):
+    def __init__(self, pos):
+        self.pos = pos[1]

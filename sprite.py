@@ -13,6 +13,7 @@ class Pad(MVCSprite):
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
         self.align = align
+        self.pos = 300
         if align:
             self.rect.right = pygame.display.get_surface().get_size()[0]
             self.image = pygame.transform.flip(self.image, 1, 0)
@@ -24,12 +25,16 @@ class Pad(MVCSprite):
                 pygame.Rect(self.rect.left, self.rect.top+140, 20, 20),
                 ]
 
-    def update(self):
+    def _playarea_collisions(self, pos):
+        """
+        Limit pad movement to playarea only
+
+        """
+
         if self.align:
             border = self.relative_to.right-self.rect.width
         else:
             border = self.relative_to.left
-        pos = pygame.mouse.get_pos()[1]
         if pos < self.relative_to.top+(self.rect.height/2):
             self.rect.top = self.relative_to.top
         elif pos > self.relative_to.bottom-(self.rect.height/2):
@@ -38,6 +43,9 @@ class Pad(MVCSprite):
             self.rect.midleft = [border, pos]
         self.hitzones[0].top = self.rect.top
         self.hitzones[1].bottom = self.rect.bottom
+
+    def update(self):
+        self._playarea_collisions(self.pos)
 
 class Ball(MVCSprite):
     def __init__(self, relative_to=None):
