@@ -12,40 +12,37 @@ class Pad(MVCSprite):
         self.image = pygame.image.load(os.path.join("data","pad.png"))
         self.image = self.image.convert()
         self.rect = self.image.get_rect()
-        self.align = align
-        self.pos = 300
-        if align:
+        self.relative_to = relative_to
+        self._align(align) # align the paddle
+        self.pos = 0
+
+    def _align(self, align):
+        """
+        Align the paddle to left or right
+
+        """
+        if align: # aligned to the right
+            self.border = self.relative_to.right-self.rect.width
             self.rect.right = pygame.display.get_surface().get_size()[0]
             self.image = pygame.transform.flip(self.image, 1, 0)
-        else:
+        else: # aligned to the left
+            self.border = self.relative_to.left
             self.rect.left = 0
-        self.relative_to = relative_to
-        self.hitzones = [ 
-                pygame.Rect(self.rect.left, self.rect.top, 20, 20),
-                pygame.Rect(self.rect.left, self.rect.top+140, 20, 20),
-                ]
 
-    def _playarea_collisions(self, pos):
+    def _playarea_collisions(self):
         """
-        Limit pad movement to playarea only
+        Correct paddle position so it won't stick out
+        of the playarea
 
         """
-
-        if self.align:
-            border = self.relative_to.right-self.rect.width
-        else:
-            border = self.relative_to.left
-        if pos < self.relative_to.top+(self.rect.height/2):
+        if self.pos < self.relative_to.top+(self.rect.height/2):
             self.rect.top = self.relative_to.top
-        elif pos > self.relative_to.bottom-(self.rect.height/2):
+        elif self.pos > self.relative_to.bottom-(self.rect.height/2):
             self.rect.bottom = self.relative_to.bottom
-        else:
-            self.rect.midleft = [border, pos]
-        self.hitzones[0].top = self.rect.top
-        self.hitzones[1].bottom = self.rect.bottom
 
     def update(self):
-        self._playarea_collisions(self.pos)
+        self.rect.midleft = [self.border, self.pos]
+        self._playarea_collisions()
 
 class Ball(MVCSprite):
     def __init__(self, relative_to=None):

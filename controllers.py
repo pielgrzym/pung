@@ -27,7 +27,7 @@ class LoopController(Controller):
         if isinstance(event, events.QuitEvent):
             self.is_running = False
 
-class InputController(Controller):
+class PlayerController(Controller):
     """
     Handle controller events
 
@@ -42,3 +42,10 @@ class InputController(Controller):
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                     self.event_manager.post(events.PauseEvent())
             self.event_manager.post(events.MovePadEvent(pygame.mouse.get_pos()))
+
+class AIController(Controller):
+    """
+    Handle kickass Artificial Inteligence which by some queer accident
+    escaped from Area 51!
+    """
+    pass
