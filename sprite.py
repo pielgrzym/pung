@@ -80,14 +80,13 @@ class Ball(MVCSprite):
         and if they occur with left/right edge it calls score events
     
         """
-        from events import ModifyScoreEvent
         newpos = self.rect.move(self.movement_vector[0], self.movement_vector[1])
         if not self.relative_to.contains(newpos):
             # right edge
             if self.rect.right > self.relative_to.right:
                 self.movement_vector[0] = -self.movement_vector[0]
                 self.image = pygame.transform.flip(self.image, 1, 0)
-                self.event_manager.post(ModifyScoreEvent(player=1))
+                self.event_manager.post(events.ModifyScoreEvent(player=1))
                 pygame.time.delay(200)
                 self.reset()
             # top/bottom edge
@@ -101,7 +100,7 @@ class Ball(MVCSprite):
             if self.rect.left < self.relative_to.left:
                 self.movement_vector[0] = -self.movement_vector[0]
                 #self.kill() # die :]
-                self.event_manager.post(ModifyScoreEvent(ai=1))
+                self.event_manager.post(events.ModifyScoreEvent(ai=1))
                 pygame.time.delay(200)
                 self.reset()
             newpos = self.rect.move((self.movement_vector[0], self.movement_vector[1]))
