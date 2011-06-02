@@ -74,17 +74,16 @@ class View(object):
 
         """
         self.ball.kill()
-        if pygame.font:
-            if win:
-                image = pygame.image.load(os.path.join("data", "fuckyea.jpg"))
-            else:
-                image = pygame.image.load(os.path.join("data", "fuuu.jpg"))
-            image = image.convert()
-            image_rect = image.get_rect()
-            image_rect.center = [400, 300]
-            self.background.blit(image, image_rect)
-            pygame.display.flip()
-            self.event_manager.unregister_listener(self)
+        if win:
+            image = pygame.image.load(os.path.join("data", "fuckyea.jpg"))
+        else:
+            image = pygame.image.load(os.path.join("data", "fuuu.jpg"))
+        image = image.convert()
+        image_rect = image.get_rect()
+        image_rect.center = [400, 300]
+        self.background.blit(image, image_rect)
+        pygame.display.flip()
+        self.event_manager.unregister_listener(self)
 
     def handle_collisions(self):
         """
