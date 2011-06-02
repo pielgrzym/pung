@@ -13,8 +13,10 @@ def main():
     size = 800, 600
     # initialize controllers
     player_controller = controllers.PlayerController()
+    ai_controller = controllers.AIController()
     loop = controllers.LoopController()
     event_manager.register_listener(player_controller)
+    event_manager.register_listener(ai_controller)
     event_manager.register_listener(loop)
 
     # initialize views

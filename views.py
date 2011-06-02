@@ -129,5 +129,7 @@ class View(object):
         elif isinstance(event, events.GameOverEvent):
             self.game_over(event.win)
         elif isinstance(event, events.MovePadEvent):
-            self.pad_left.pos =  event.pos
-            self.pad_right.pos =  event.pos
+            if event.left:
+                self.pad_left.pos =  event.pos
+            else:
+                self.pad_right.pos =  event.pos

@@ -41,11 +41,28 @@ class PlayerController(Controller):
                     self.event_manager.post(events.QuitEvent())
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                     self.event_manager.post(events.PauseEvent())
-            self.event_manager.post(events.MovePadEvent(pygame.mouse.get_pos()))
+            # move the left pad with mouse
+            self.event_manager.post(
+                    events.MovePadEvent(pygame.mouse.get_pos(), True)
+                    )
 
 class AIController(Controller):
     """
     Handle kickass Artificial Inteligence which by some queer accident
     escaped from Area 51!
     """
-    pass
+
+    def notify(self, event):
+        """
+        Some serious AI shit here
+
+        """
+
+        if isinstance(event, events.TickEvent):
+            pass
+        elif isinstance(event, events.BallMoveEvent):
+            if event.x > 400:
+                pos = [0, event.y]
+                self.event_manager.post(
+                        events.MovePadEvent(pos, False)
+                        )

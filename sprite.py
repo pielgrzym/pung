@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame, os
+import events
 from event_manager import event_manager
 
 class MVCSprite(pygame.sprite.Sprite):
@@ -57,6 +58,8 @@ class Ball(MVCSprite):
         self.movement_vector = [8,6] # base movement vector
 
     def update(self):
+        coords = self.rect.center
+        self.event_manager.post(events.BallMoveEvent(coords))
         self._fly()
 
     def reset(self):

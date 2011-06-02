@@ -50,5 +50,16 @@ class GameOverEvent(Event):
         self.win = win
 
 class MovePadEvent(Event):
-    def __init__(self, pos):
+    def __init__(self, pos, left=False):
+        self.left = left
         self.pos = pos[1]
+
+class BallMoveEvent(Event):
+    def __init__(self, coords):
+        """
+        Ball movement event - for ai to determine next move
+
+        """
+
+        self.coords = coords
+        self.x, self.y = coords
