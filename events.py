@@ -74,3 +74,14 @@ class PadMoveEvent(Event):
         self.coords = coords
         self.x, self.y = coords
         self.right = right
+
+# gui events
+
+class FocusWidgetEvent(Event):
+    def __init__(self, widget=None):
+        """
+        docstring
+    
+        """
+    
+        self.widget = widget
