@@ -1,10 +1,42 @@
 import pygame, os
 from event_manager import event_manager
 import events
+import gui
 
-class GameView(object):
+class View(object):
+    event_manager = event_manager
+
     def __init__(self, size=(800,600)):
-        self.event_manager = event_manager
+        """
+        Setup the screen
+    
+        """
+    
+        self._setup_screen(size)
+
+    def register_surface(self, surface):
+        self.surfaces.append(surface)
+
+    def _blit_registered_surfaces(self):
+        """
+        Blit registered surfaces - called on each tick
+    
+        """
+    
+        for surface, rect in self.surfaces:
+            self.background.blit(surface, rect)
+
+    def _setup_screen(self, size):
+        """
+        Sets up the screen
+    
+        """
+        self.screen = pygame.display.set_mode(size)
+        pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
+        pygame.mouse.set_visible(0)
+
+class GameView(View):
+    def __init__(self, size=(800,600)):
         self.surfaces = []
         self.paused = False
         self._setup_screen(size)
@@ -19,15 +51,6 @@ class GameView(object):
         """
         from score import Score
         self.score = Score(self.background)
-
-    def _setup_screen(self, size):
-        """
-        Sets up the screen
-    
-        """
-        self.screen = pygame.display.set_mode(size)
-        pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
-        pygame.mouse.set_visible(0)
 
     def _setup_sprites(self):
         """
@@ -45,15 +68,6 @@ class GameView(object):
                     ))
         self.pads = pygame.sprite.Group((self.pad_left, self.pad_right))
 
-    def _blit_registered_surfaces(self):
-        """
-        Blit registered surfaces - called on each tick
-    
-        """
-    
-        for surface, rect in self.surfaces:
-            self.background.blit(surface, rect)
-
     def _setup_background(self):
         self.background = pygame.Surface((self.screen.get_size()))
         self.background = self.background.convert()
@@ -64,9 +78,6 @@ class GameView(object):
         self.playarea_rect = self.playarea.get_rect()
         self.playarea_rect.top = 50
         self.background.blit(self.playarea, self.playarea_rect)
-
-    def register_surface(self, surface):
-        self.surfaces.append(surface)
 
     def game_over(self, win=True):
         """
