@@ -2,7 +2,7 @@ import pygame, os
 from event_manager import event_manager
 import events
 
-class View(object):
+class GameView(object):
     def __init__(self, size=(800,600)):
         self.event_manager = event_manager
         self.surfaces = []

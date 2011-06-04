@@ -20,8 +20,8 @@ def main():
     event_manager.register_listener(loop)
 
     # initialize views
-    main_view = views.View(size=size)
-    event_manager.register_listener(main_view)
+    game_view = views.GameView(size=size)
+    event_manager.register_listener(game_view)
 
     # start master loop
     loop.run()
