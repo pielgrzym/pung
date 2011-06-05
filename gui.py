@@ -6,6 +6,7 @@ class Widget(pygame.sprite.Sprite):
     event_manager = event_manager
 
     def __init__(self, container=None):
+        pygame.sprite.Sprite.__init__(self)
         self.container = container
         self.focused = 0
         self.dirty = 1
@@ -31,10 +32,15 @@ class Widget(pygame.sprite.Sprite):
             self.set_focus(0)
 
 class LabelWidget(Widget):
-    def __init__(self, text, container=None):
+    def __init__(self, text, container=None, pos=None):
         Widget.__init__(self, container)
-        self.color = (200, 200, 200)
+        self.color = (20, 20, 20)
         self.font = pygame.font.Font(None, 30)
         self.__text = text
         self.image = self.font.render(self.__text, 1, self.color)
         self.rect = self.image.get_rect()
+        if not pos:
+            self.rect = self.rect.move(container.topleft)
+        else:
+            rx, ry = container.topleft
+            self.rect = self.rect.move((rx+pos[0],ry+pos[1]))

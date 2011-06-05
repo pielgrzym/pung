@@ -15,16 +15,19 @@ class View(object):
         self._setup_screen(size)
 
     def register_surface(self, surface):
-        self.surfaces.append(surface)
+        if hasattr(self, 'surfaces'): 
+            self.surfaces.append(surface)
+        else:
+            self.surfaces = [surface]
 
     def _blit_registered_surfaces(self):
         """
         Blit registered surfaces - called on each tick
     
         """
-    
-        for surface, rect in self.surfaces:
-            self.background.blit(surface, rect)
+        if hasattr(self, 'surfaces'): 
+            for surface, rect in self.surfaces:
+                self.background.blit(surface, rect)
 
     def _setup_screen(self, size):
         """
@@ -34,6 +37,52 @@ class View(object):
         self.screen = pygame.display.set_mode(size)
         pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
         pygame.mouse.set_visible(0)
+
+class MenuView(View):
+    def __init__(self, size=(800,600)):
+        self._setup_screen(size)
+        self._setup_background()
+        self.surfaces = []
+        self.title_widget = gui.LabelWidget("PUNG - main menu", container=self.menu_rect,
+                pos=[10,10])
+        self.start_widget = gui.LabelWidget("Start game", container=self.menu_rect,
+                pos=[30,50])
+        self.options_widget = gui.LabelWidget("Options", container=self.menu_rect,
+                pos=[30,75])
+        self.exit_widget = gui.LabelWidget("Exit game", container=self.menu_rect,
+                pos=[30,100])
+
+        self.allsprites = pygame.sprite.Group((
+            self.title_widget,
+            self.start_widget,
+            self.options_widget,
+            self.exit_widget
+            ))
+
+    def _setup_background(self):
+        self.background = pygame.Surface((self.screen.get_size()))
+        self.background = self.background.convert()
+        self.background.fill((0,0,0))
+
+        self.menu_rect = pygame.Rect(100,100, 600, 400)
+        self.menu = pygame.Surface((600,400))
+        self.menu = self.menu.convert()
+        self.menu.fill((180,180,180))
+        self.background.blit(self.menu, self.menu_rect)
+
+
+    def notify(self, event):
+        """
+        Recieve events
+    
+        """
+        if isinstance(event, events.TickEvent):
+            if self.surfaces:
+                self._blit_registered_surfaces()
+            self.screen.blit(self.background, (0,0))
+            self.allsprites.draw(self.screen)
+            pygame.display.flip()
+    
 
 class GameView(View):
     def __init__(self, size=(800,600)):
