@@ -78,10 +78,7 @@ class PadMoveEvent(Event):
 # gui events
 
 class FocusWidgetEvent(Event):
-    def __init__(self, widget=None):
-        """
-        docstring
-    
-        """
-    
-        self.widget = widget
+    def __init__(self, action):
+        if not action in ['up', 'down', 'select']:
+            raise ValueError('Wrong FocusWidgetEvent direction')
+        self.action = action

@@ -46,12 +46,12 @@ class MenuView(View):
         self.title_widget = gui.LabelWidget("PUNG - main menu", container=self.menu_rect,
                 pos=[10,10])
         self.menu_start = gui.ButtonWidget("Start game", container=self.menu_rect,
-                pos=[30,50])
+                pos=[30,50], action=self.__menu_start)
         self.menu_start.set_focus(1)
         self.menu_options = gui.ButtonWidget("Options", container=self.menu_rect,
-                pos=[30,75])
+                pos=[30,75], action=self.__menu_options)
         self.menu_exit = gui.ButtonWidget("Exit game", container=self.menu_rect,
-                pos=[30,100])
+                pos=[30,100], action=self.__menu_quit)
 
         self.allsprites = pygame.sprite.Group((
             self.title_widget,
@@ -59,6 +59,7 @@ class MenuView(View):
             self.menu_options,
             self.menu_exit
             ))
+
         self.menu = pygame.sprite.Group((
             self.menu_start,
             self.menu_options,
@@ -76,6 +77,48 @@ class MenuView(View):
         self.menu.fill((180,180,180))
         self.background.blit(self.menu, self.menu_rect)
 
+    def __menu_start(self):
+        print 'Ssstart?'
+
+    def __menu_options(self):
+        print 'No options yet'
+
+    def __menu_quit(self):
+        self.event_manager.post(events.QuitEvent())
+
+    def select_item(self, group):
+        """
+        Uses item action
+    
+        """
+        sprite_list = group.sprites()
+        for i, sprite in enumerate(sprite_list):
+            if sprite.focused:
+                sprite.action()
+
+    def focus_next(self, group):
+        sprite_list = group.sprites()
+        sprite_list.sort(key=lambda x: x.id)
+        for i, sprite in enumerate(sprite_list):
+            if sprite.focused:
+                sprite.set_focus(0)
+                if i == len(sprite_list)-1:
+                    sprite_list[0].set_focus(1)
+                else:
+                    sprite_list[i+1].set_focus(1)
+                break
+
+    def focus_prev(self, group):
+        sprite_list = group.sprites()
+        sprite_list.sort(key=lambda x: x.id)
+        for i, sprite in enumerate(sprite_list):
+            if sprite.focused:
+                sprite.set_focus(0)
+                if i == 0:
+                    sprite_list[-1].set_focus(1)
+                else:
+                    sprite_list[i-1].set_focus(1)
+                break
 
     def notify(self, event):
         """
@@ -88,6 +131,13 @@ class MenuView(View):
             self.screen.blit(self.background, (0,0))
             self.allsprites.draw(self.screen)
             pygame.display.flip()
+        elif isinstance(event, events.FocusWidgetEvent):
+            if event.action == 'up':
+                self.focus_prev(self.menu)
+            elif event.action == 'down':
+                self.focus_next(self.menu)
+            elif event.action == 'select':
+                self.select_item(self.menu)
     
 
 class GameView(View):

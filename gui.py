@@ -46,7 +46,9 @@ class LabelWidget(Widget):
             self.rect = self.rect.move((rx+pos[0],ry+pos[1]))
 
 class ButtonWidget(Widget):
-    def __init__(self, text, container=None, pos=None, color=None, active_color=None):
+    widget_id = 0
+    def __init__(self, text, container=None, pos=None, color=None,
+            active_color=None, action=None):
         Widget.__init__(self, container)
         self.color = color or (20, 20, 20)
         self.active_color = active_color or (120,0,0)
@@ -56,12 +58,24 @@ class ButtonWidget(Widget):
         self.__text = text
         self.image = self.font.render(self.__text, 1, self.color)
         self.rect = self.image.get_rect()
+        if action:
+            self.action = action
 
         if not pos:
             self.rect = self.rect.move(container.topleft)
         else:
             rx, ry = container.topleft
             self.rect = self.rect.move((rx+pos[0],ry+pos[1]))
+        self.id = self.widget_id+1
+        self.widget_id += 1
+
+    def __repr__(self):
+        """
+        docstring
+    
+        """
+    
+        return self.__text
 
     def set_focus(self, val):
         if self.focused == val:

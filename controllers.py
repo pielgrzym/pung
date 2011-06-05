@@ -41,6 +41,12 @@ class PlayerController(Controller):
                     self.event_manager.post(events.QuitEvent())
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                     self.event_manager.post(events.PauseEvent())
+                elif event.type == pygame.KEYUP and event.key == pygame.K_UP:
+                    self.event_manager.post(events.FocusWidgetEvent('up'))
+                elif event.type == pygame.KEYUP and event.key == pygame.K_DOWN:
+                    self.event_manager.post(events.FocusWidgetEvent('down'))
+                elif event.type == pygame.KEYUP and event.key == pygame.K_RETURN:
+                    self.event_manager.post(events.FocusWidgetEvent('select'))
             # move the left pad with mouse
             self.event_manager.post(
                     events.ControlPadEvent(pygame.mouse.get_pos(), True)
