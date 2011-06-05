@@ -34,9 +34,13 @@ class View(object):
         Sets up the screen
     
         """
-        self.screen = pygame.display.set_mode(size)
-        pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
-        pygame.mouse.set_visible(0)
+        if size is None:
+            print 'e'
+            self.screen = pygame.display.get_surface()
+        else:
+            self.screen = pygame.display.set_mode(size)
+            pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
+            pygame.mouse.set_visible(0)
 
 class MenuView(View):
     def __init__(self, size=(800,600)):
@@ -60,11 +64,12 @@ class MenuView(View):
             self.menu_exit
             ))
 
-        self.menu = pygame.sprite.Group((
+        self.menu_items = pygame.sprite.Group((
             self.menu_start,
             self.menu_options,
             self.menu_exit
             ))
+        self.stopped = False
 
     def _setup_background(self):
         self.background = pygame.Surface((self.screen.get_size()))
@@ -72,13 +77,22 @@ class MenuView(View):
         self.background.fill((0,0,0))
 
         self.menu_rect = pygame.Rect(100,100, 600, 400)
-        self.menu = pygame.Surface((600,400))
-        self.menu = self.menu.convert()
-        self.menu.fill((180,180,180))
-        self.background.blit(self.menu, self.menu_rect)
+        self.menubg = pygame.Surface((600,400))
+        self.menubg = self.menubg.convert()
+        self.menubg.fill((180,180,180))
+        self.background.blit(self.menubg, self.menu_rect)
+
+    def kill(self):
+        """
+        docstring
+    
+        """
+    
+        self.allsprites.empty()
+        self.stopped = True
 
     def __menu_start(self):
-        print 'Ssstart?'
+        self.event_manager.post(events.StartGameEvent(self))
 
     def __menu_options(self):
         print 'No options yet'
@@ -126,25 +140,26 @@ class MenuView(View):
     
         """
         if isinstance(event, events.TickEvent):
-            if self.surfaces:
-                self._blit_registered_surfaces()
-            self.screen.blit(self.background, (0,0))
-            self.allsprites.draw(self.screen)
-            pygame.display.flip()
+            if not self.stopped:
+                if self.surfaces:
+                    self._blit_registered_surfaces()
+                self.screen.blit(self.background, (0,0))
+                self.allsprites.draw(self.screen)
+                pygame.display.flip()
         elif isinstance(event, events.FocusWidgetEvent):
             if event.action == 'up':
-                self.focus_prev(self.menu)
+                self.focus_prev(self.menu_items)
             elif event.action == 'down':
-                self.focus_next(self.menu)
+                self.focus_next(self.menu_items)
             elif event.action == 'select':
-                self.select_item(self.menu)
+                self.select_item(self.menu_items)
     
 
 class GameView(View):
     def __init__(self, size=(800,600)):
         self.surfaces = []
         self.paused = False
-        self._setup_screen(size)
+        self._setup_screen(None)
         self._setup_background()
         self._setup_sprites()
         self._setup_score()

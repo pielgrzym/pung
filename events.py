@@ -75,6 +75,15 @@ class PadMoveEvent(Event):
         self.x, self.y = coords
         self.right = right
 
+class StartGameEvent(Event):
+    def __init__(self, view):
+        """
+        docstring
+    
+        """
+    
+        self.view = view
+
 # gui events
 
 class FocusWidgetEvent(Event):

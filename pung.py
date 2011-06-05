@@ -10,13 +10,12 @@ def main():
 
     """
     pygame.init()
-    size = 800, 600
     # initialize controllers
+    view_controller = controllers.ViewController()
     player_controller = controllers.PlayerController()
-    ai_controller = controllers.AIController()
     loop = controllers.LoopController()
+    event_manager.register_listener(view_controller)
     event_manager.register_listener(player_controller)
-    event_manager.register_listener(ai_controller)
     event_manager.register_listener(loop)
 
     # initialize views

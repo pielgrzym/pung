@@ -1,6 +1,7 @@
 import pygame
 from event_manager import event_manager
 import events
+import views
 
 class Controller(object):
     event_manager = event_manager
@@ -26,6 +27,20 @@ class LoopController(Controller):
     def notify(self, event):
         if isinstance(event, events.QuitEvent):
             self.is_running = False
+
+class ViewController(Controller):
+    def notify(self, event):
+        """
+        docstring
+    
+        """
+    
+        if isinstance(event, events.StartGameEvent):
+            event.view.kill()
+            self.game_view = views.GameView()
+            self.event_manager.register_listener(self.game_view)
+            self.ai_controller = AIController()
+            self.event_manager.register_listener(self.ai_controller)
 
 class PlayerController(Controller):
     """
