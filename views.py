@@ -45,18 +45,24 @@ class MenuView(View):
         self.surfaces = []
         self.title_widget = gui.LabelWidget("PUNG - main menu", container=self.menu_rect,
                 pos=[10,10])
-        self.start_widget = gui.LabelWidget("Start game", container=self.menu_rect,
+        self.menu_start = gui.ButtonWidget("Start game", container=self.menu_rect,
                 pos=[30,50])
-        self.options_widget = gui.LabelWidget("Options", container=self.menu_rect,
+        self.menu_start.set_focus(1)
+        self.menu_options = gui.ButtonWidget("Options", container=self.menu_rect,
                 pos=[30,75])
-        self.exit_widget = gui.LabelWidget("Exit game", container=self.menu_rect,
+        self.menu_exit = gui.ButtonWidget("Exit game", container=self.menu_rect,
                 pos=[30,100])
 
         self.allsprites = pygame.sprite.Group((
             self.title_widget,
-            self.start_widget,
-            self.options_widget,
-            self.exit_widget
+            self.menu_start,
+            self.menu_options,
+            self.menu_exit
+            ))
+        self.menu = pygame.sprite.Group((
+            self.menu_start,
+            self.menu_options,
+            self.menu_exit
             ))
 
     def _setup_background(self):
