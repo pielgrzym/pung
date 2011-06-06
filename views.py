@@ -34,13 +34,9 @@ class View(object):
         Sets up the screen
     
         """
-        if size is None:
-            print 'e'
-            self.screen = pygame.display.get_surface()
-        else:
-            self.screen = pygame.display.set_mode(size)
-            pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
-            pygame.mouse.set_visible(0)
+        self.screen = pygame.display.set_mode(size)
+        pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
+        pygame.mouse.set_visible(0)
 
 class MenuView(View):
     def __init__(self, size=(800,600)):
@@ -159,8 +155,19 @@ class GameView(View):
     def __init__(self, size=(800,600)):
         self.surfaces = []
         self.paused = False
-        self._setup_screen(None)
+        self.stopped = False
+        self._setup_screen(size)
         self._setup_background()
+        self._setup_sprites()
+        self._setup_score()
+
+    def reset(self):
+        """
+        Resets score and sprites
+    
+        """
+    
+        self.allsprites.empty()
         self._setup_sprites()
         self._setup_score()
 
@@ -199,6 +206,15 @@ class GameView(View):
         self.playarea_rect.top = 50
         self.background.blit(self.playarea, self.playarea_rect)
 
+    def kill(self):
+        """
+        docstring
+    
+        """
+    
+        self.allsprites.empty()
+        self.stopped = True
+
     def game_over(self, win=True):
         """
         What do you think it does??
@@ -214,7 +230,7 @@ class GameView(View):
         image_rect.center = [400, 300]
         self.background.blit(image, image_rect)
         pygame.display.flip()
-        self.event_manager.unregister_listener(self)
+        #self.event_manager.unregister_listener(self)
 
     def handle_collisions(self):
         """
@@ -238,7 +254,7 @@ class GameView(View):
         Recieve events
     
         """
-        if isinstance(event, events.TickEvent):
+        if isinstance(event, events.TickEvent) and not self.stopped:
             if not self.paused:
                 self.handle_collisions()
                 self.allsprites.update()
