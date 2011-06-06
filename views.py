@@ -45,12 +45,12 @@ class MenuView(View):
         self.surfaces = []
         self.title_widget = gui.LabelWidget("PUNG - main menu", container=self.menu_rect,
                 pos=[10,10])
-        self.menu_start = gui.ButtonWidget("Start game", container=self.menu_rect,
+        self.menu_start = gui.ButtonWidget("Start game", 0, container=self.menu_rect,
                 pos=[30,50], action=self.__menu_start)
         self.menu_start.set_focus(1)
-        self.menu_options = gui.ButtonWidget("Options", container=self.menu_rect,
+        self.menu_options = gui.ButtonWidget("Options", 1, container=self.menu_rect,
                 pos=[30,75], action=self.__menu_options)
-        self.menu_exit = gui.ButtonWidget("Exit game", container=self.menu_rect,
+        self.menu_exit = gui.ButtonWidget("Exit game", 2, container=self.menu_rect,
                 pos=[30,100], action=self.__menu_quit)
 
         self.allsprites = pygame.sprite.Group((
@@ -230,6 +230,7 @@ class GameView(View):
         image_rect.center = [400, 300]
         self.background.blit(image, image_rect)
         pygame.display.flip()
+        self.stopped = True
         #self.event_manager.unregister_listener(self)
 
     def handle_collisions(self):

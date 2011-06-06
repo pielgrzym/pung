@@ -46,8 +46,7 @@ class LabelWidget(Widget):
             self.rect = self.rect.move((rx+pos[0],ry+pos[1]))
 
 class ButtonWidget(Widget):
-    widget_id = 0
-    def __init__(self, text, container=None, pos=None, color=None,
+    def __init__(self, text, widget_id=0, container=None, pos=None, color=None,
             active_color=None, action=None):
         Widget.__init__(self, container)
         self.color = color or (20, 20, 20)
@@ -66,8 +65,7 @@ class ButtonWidget(Widget):
         else:
             rx, ry = container.topleft
             self.rect = self.rect.move((rx+pos[0],ry+pos[1]))
-        self.id = self.widget_id+1
-        self.widget_id += 1
+        self.id = widget_id
 
     def __repr__(self):
         """

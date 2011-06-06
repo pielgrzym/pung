@@ -55,7 +55,7 @@ class ViewController(Controller):
             if not self.ai_controller:
                 self.ai_controller = AIController()
             self.event_manager.register_listener(self.ai_controller)
-        elif isinstance(event, events.GameOverEvent):
+        elif isinstance(event, events.ReturnToMenuEvent):
             #self.game_view.kill()
             self.event_manager.unregister_listener(self.game_view)
             self.event_manager.unregister_listener(self.ai_controller)
@@ -68,6 +68,14 @@ class PlayerController(Controller):
     Handle controller events
 
     """
+    def __init__(self):
+        """
+        docstring
+    
+        """
+    
+        self.game_over = False
+
     def notify(self, e):
         if isinstance(e, events.TickEvent):
             for event in pygame.event.get():
@@ -82,11 +90,17 @@ class PlayerController(Controller):
                 elif event.type == pygame.KEYUP and event.key == pygame.K_DOWN:
                     self.event_manager.post(events.FocusWidgetEvent('down'))
                 elif event.type == pygame.KEYUP and event.key == pygame.K_RETURN:
-                    self.event_manager.post(events.FocusWidgetEvent('select'))
+                    if not self.game_over:
+                        self.event_manager.post(events.FocusWidgetEvent('select'))
+                    else:
+                        self.game_over = False
+                        self.event_manager.post(events.ReturnToMenuEvent())
             # move the left pad with mouse
             self.event_manager.post(
                     events.ControlPadEvent(pygame.mouse.get_pos(), True)
                     )
+        elif isinstance(e, events.GameOverEvent):
+            self.game_over = True
 
 class AIController(Controller):
     """

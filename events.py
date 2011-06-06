@@ -49,6 +49,9 @@ class GameOverEvent(Event):
     def __init__(self, win=True):
         self.win = win
 
+class ReturnToMenuEvent(Event):
+    pass
+
 class ControlPadEvent(Event):
     def __init__(self, pos, left=False):
         self.left = left
