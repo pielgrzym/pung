@@ -1,6 +1,7 @@
 import pygame
 from event_manager import event_manager
 import events
+import views
 
 class Controller(object):
     event_manager = event_manager
@@ -27,11 +28,54 @@ class LoopController(Controller):
         if isinstance(event, events.QuitEvent):
             self.is_running = False
 
+class ViewController(Controller):
+    def __init__(self):
+        """
+        docstring
+    
+        """
+    
+        self.game_view = None
+        self.ai_controller = None
+        self.menu_view = None
+
+    def notify(self, event):
+        """
+        docstring
+    
+        """
+    
+        if isinstance(event, events.StartGameEvent):
+            #event.view.kill()
+            self.event_manager.unregister_listener(event.view)
+            if not self.game_view:
+                self.game_view = views.GameView()
+            self.event_manager.register_listener(self.game_view)
+            self.game_view.reset()
+            if not self.ai_controller:
+                self.ai_controller = AIController()
+            self.event_manager.register_listener(self.ai_controller)
+        elif isinstance(event, events.ReturnToMenuEvent):
+            #self.game_view.kill()
+            self.event_manager.unregister_listener(self.game_view)
+            self.event_manager.unregister_listener(self.ai_controller)
+            if not self.menu_view:
+                self.menu_view = views.MenuView()
+            self.event_manager.register_listener(self.menu_view)
+
 class PlayerController(Controller):
     """
     Handle controller events
 
     """
+    def __init__(self):
+        """
+        docstring
+    
+        """
+    
+        self.game_over = False
+
     def notify(self, e):
         if isinstance(e, events.TickEvent):
             for event in pygame.event.get():
@@ -41,16 +85,31 @@ class PlayerController(Controller):
                     self.event_manager.post(events.QuitEvent())
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                     self.event_manager.post(events.PauseEvent())
+                elif event.type == pygame.KEYUP and event.key == pygame.K_UP:
+                    self.event_manager.post(events.FocusWidgetEvent('up'))
+                elif event.type == pygame.KEYUP and event.key == pygame.K_DOWN:
+                    self.event_manager.post(events.FocusWidgetEvent('down'))
+                elif event.type == pygame.KEYUP and event.key == pygame.K_RETURN:
+                    if not self.game_over:
+                        self.event_manager.post(events.FocusWidgetEvent('select'))
+                    else:
+                        self.game_over = False
+                        self.event_manager.post(events.ReturnToMenuEvent())
             # move the left pad with mouse
             self.event_manager.post(
                     events.ControlPadEvent(pygame.mouse.get_pos(), True)
                     )
+        elif isinstance(e, events.GameOverEvent):
+            self.game_over = True
 
 class AIController(Controller):
     """
     Handle kickass Artificial Inteligence which by some queer accident
     escaped from Area 51!
     """
+
+    def __init__(self):
+        self.last_pos = 0
 
     def notify(self, event):
         """

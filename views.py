@@ -1,24 +1,33 @@
 import pygame, os
 from event_manager import event_manager
 import events
+import gui
 
 class View(object):
-    def __init__(self, size=(800,600)):
-        self.event_manager = event_manager
-        self.surfaces = []
-        self.paused = False
-        self._setup_screen(size)
-        self._setup_background()
-        self._setup_sprites()
-        self._setup_score()
+    event_manager = event_manager
 
-    def _setup_score(self):
+    def __init__(self, size=(800,600)):
         """
-        Sets up the score object
+        Setup the screen
     
         """
-        from score import Score
-        self.score = Score(self.background)
+    
+        self._setup_screen(size)
+
+    def register_surface(self, surface):
+        if hasattr(self, 'surfaces'): 
+            self.surfaces.append(surface)
+        else:
+            self.surfaces = [surface]
+
+    def _blit_registered_surfaces(self):
+        """
+        Blit registered surfaces - called on each tick
+    
+        """
+        if hasattr(self, 'surfaces'): 
+            for surface, rect in self.surfaces:
+                self.background.blit(surface, rect)
 
     def _setup_screen(self, size):
         """
@@ -28,6 +37,149 @@ class View(object):
         self.screen = pygame.display.set_mode(size)
         pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
         pygame.mouse.set_visible(0)
+
+class MenuView(View):
+    def __init__(self, size=(800,600)):
+        self._setup_screen(size)
+        self._setup_background()
+        self.surfaces = []
+        self.title_widget = gui.LabelWidget("PUNG - main menu", container=self.menu_rect,
+                pos=[10,10])
+        self.menu_start = gui.ButtonWidget("Start game", 0, container=self.menu_rect,
+                pos=[30,50], action=self.__menu_start)
+        self.menu_start.set_focus(1)
+        self.menu_options = gui.ButtonWidget("Options", 1, container=self.menu_rect,
+                pos=[30,75], action=self.__menu_options)
+        self.menu_exit = gui.ButtonWidget("Exit game", 2, container=self.menu_rect,
+                pos=[30,100], action=self.__menu_quit)
+
+        self.allsprites = pygame.sprite.Group((
+            self.title_widget,
+            self.menu_start,
+            self.menu_options,
+            self.menu_exit
+            ))
+
+        self.menu_items = pygame.sprite.Group((
+            self.menu_start,
+            self.menu_options,
+            self.menu_exit
+            ))
+        self.stopped = False
+
+    def _setup_background(self):
+        self.background = pygame.Surface((self.screen.get_size()))
+        self.background = self.background.convert()
+        self.background.fill((0,0,0))
+
+        self.menu_rect = pygame.Rect(100,100, 600, 400)
+        self.menubg = pygame.Surface((600,400))
+        self.menubg = self.menubg.convert()
+        self.menubg.fill((180,180,180))
+        self.background.blit(self.menubg, self.menu_rect)
+
+    def kill(self):
+        """
+        docstring
+    
+        """
+    
+        self.allsprites.empty()
+        self.stopped = True
+
+    def __menu_start(self):
+        self.event_manager.post(events.StartGameEvent(self))
+
+    def __menu_options(self):
+        print 'No options yet'
+
+    def __menu_quit(self):
+        self.event_manager.post(events.QuitEvent())
+
+    def select_item(self, group):
+        """
+        Uses item action
+    
+        """
+        sprite_list = group.sprites()
+        for i, sprite in enumerate(sprite_list):
+            if sprite.focused:
+                sprite.action()
+
+    def focus_next(self, group):
+        sprite_list = group.sprites()
+        sprite_list.sort(key=lambda x: x.id)
+        for i, sprite in enumerate(sprite_list):
+            if sprite.focused:
+                sprite.set_focus(0)
+                if i == len(sprite_list)-1:
+                    sprite_list[0].set_focus(1)
+                else:
+                    sprite_list[i+1].set_focus(1)
+                break
+
+    def focus_prev(self, group):
+        sprite_list = group.sprites()
+        sprite_list.sort(key=lambda x: x.id)
+        for i, sprite in enumerate(sprite_list):
+            if sprite.focused:
+                sprite.set_focus(0)
+                if i == 0:
+                    sprite_list[-1].set_focus(1)
+                else:
+                    sprite_list[i-1].set_focus(1)
+                break
+
+    def notify(self, event):
+        """
+        Recieve events
+    
+        """
+        if isinstance(event, events.TickEvent):
+            if not self.stopped:
+                if self.surfaces:
+                    self._blit_registered_surfaces()
+                self.screen.blit(self.background, (0,0))
+                self.allsprites.draw(self.screen)
+                pygame.display.flip()
+        elif isinstance(event, events.FocusWidgetEvent):
+            if event.action == 'up':
+                self.focus_prev(self.menu_items)
+            elif event.action == 'down':
+                self.focus_next(self.menu_items)
+            elif event.action == 'select':
+                self.select_item(self.menu_items)
+    
+
+class GameView(View):
+    def __init__(self, size=(800,600)):
+        self.surfaces = []
+        self.paused = False
+        self.stopped = False
+        self._setup_screen(size)
+        self._setup_background()
+        self._setup_sprites()
+        self._setup_score()
+
+    def reset(self):
+        """
+        Resets score and sprites
+    
+        """
+    
+        self.allsprites.empty()
+        self._setup_background()
+        self._setup_sprites()
+        self._setup_score()
+        self.stopped = False
+
+    def _setup_score(self):
+        """
+        Sets up the score object
+    
+        """
+        from score import Score
+        self.score = Score(self.background)
 
     def _setup_sprites(self):
         """
@@ -45,15 +197,6 @@ class View(object):
                     ))
         self.pads = pygame.sprite.Group((self.pad_left, self.pad_right))
 
-    def _blit_registered_surfaces(self):
-        """
-        Blit registered surfaces - called on each tick
-    
-        """
-    
-        for surface, rect in self.surfaces:
-            self.background.blit(surface, rect)
-
     def _setup_background(self):
         self.background = pygame.Surface((self.screen.get_size()))
         self.background = self.background.convert()
@@ -65,8 +208,14 @@ class View(object):
         self.playarea_rect.top = 50
         self.background.blit(self.playarea, self.playarea_rect)
 
-    def register_surface(self, surface):
-        self.surfaces.append(surface)
+    def kill(self):
+        """
+        docstring
+    
+        """
+    
+        self.allsprites.empty()
+        self.stopped = True
 
     def game_over(self, win=True):
         """
@@ -83,7 +232,8 @@ class View(object):
         image_rect.center = [400, 300]
         self.background.blit(image, image_rect)
         pygame.display.flip()
-        self.event_manager.unregister_listener(self)
+        self.stopped = True
+        #self.event_manager.unregister_listener(self)
 
     def handle_collisions(self):
         """
@@ -107,7 +257,7 @@ class View(object):
         Recieve events
     
         """
-        if isinstance(event, events.TickEvent):
+        if isinstance(event, events.TickEvent) and not self.stopped:
             if not self.paused:
                 self.handle_collisions()
                 self.allsprites.update()
