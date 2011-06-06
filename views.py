@@ -168,8 +168,10 @@ class GameView(View):
         """
     
         self.allsprites.empty()
+        self._setup_background()
         self._setup_sprites()
         self._setup_score()
+        self.stopped = False
 
     def _setup_score(self):
         """
