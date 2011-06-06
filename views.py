@@ -79,11 +79,6 @@ class MenuView(View):
         self.background.blit(self.menubg, self.menu_rect)
 
     def kill(self):
-        """
-        docstring
-    
-        """
-    
         self.allsprites.empty()
         self.stopped = True
 
@@ -209,11 +204,6 @@ class GameView(View):
         self.background.blit(self.playarea, self.playarea_rect)
 
     def kill(self):
-        """
-        docstring
-    
-        """
-    
         self.allsprites.empty()
         self.stopped = True
 

@@ -49,9 +49,6 @@ class GameOverEvent(Event):
     def __init__(self, win=True):
         self.win = win
 
-class ReturnToMenuEvent(Event):
-    pass
-
 class ControlPadEvent(Event):
     def __init__(self, pos, left=False):
         self.left = left
@@ -80,11 +77,6 @@ class PadMoveEvent(Event):
 
 class StartGameEvent(Event):
     def __init__(self, view):
-        """
-        docstring
-    
-        """
-    
         self.view = view
 
 # gui events
@@ -94,3 +86,6 @@ class FocusWidgetEvent(Event):
         if not action in ['up', 'down', 'select']:
             raise ValueError('Wrong FocusWidgetEvent direction')
         self.action = action
+
+class ReturnToMenuEvent(Event):
+    pass

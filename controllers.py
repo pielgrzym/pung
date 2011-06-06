@@ -29,22 +29,15 @@ class LoopController(Controller):
             self.is_running = False
 
 class ViewController(Controller):
+    """
+    Controller to switch back and forth from menu to game views
+    """
     def __init__(self):
-        """
-        docstring
-    
-        """
-    
         self.game_view = None
         self.ai_controller = None
         self.menu_view = None
 
     def notify(self, event):
-        """
-        docstring
-    
-        """
-    
         if isinstance(event, events.StartGameEvent):
             #event.view.kill()
             self.event_manager.unregister_listener(event.view)
@@ -69,11 +62,6 @@ class PlayerController(Controller):
 
     """
     def __init__(self):
-        """
-        docstring
-    
-        """
-    
         self.game_over = False
 
     def notify(self, e):

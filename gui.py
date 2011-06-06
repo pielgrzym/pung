@@ -68,11 +68,6 @@ class ButtonWidget(Widget):
         self.id = widget_id
 
     def __repr__(self):
-        """
-        docstring
-    
-        """
-    
         return self.__text
 
     def set_focus(self, val):
