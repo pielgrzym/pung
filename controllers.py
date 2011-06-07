@@ -39,7 +39,6 @@ class ViewController(Controller):
 
     def notify(self, event):
         if isinstance(event, events.StartGameEvent):
-            #event.view.kill()
             self.event_manager.unregister_listener(event.view)
             if not self.game_view:
                 self.game_view = views.GameView()
@@ -49,7 +48,6 @@ class ViewController(Controller):
                 self.ai_controller = AIController()
             self.event_manager.register_listener(self.ai_controller)
         elif isinstance(event, events.ReturnToMenuEvent):
-            #self.game_view.kill()
             self.event_manager.unregister_listener(self.game_view)
             self.event_manager.unregister_listener(self.ai_controller)
             if not self.menu_view:

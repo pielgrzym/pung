@@ -34,7 +34,7 @@ class View(object):
         Sets up the screen
     
         """
-        self.screen = pygame.display.set_mode(size)
+        self.screen = pygame.display.set_mode(size)#, pygame.FULLSCREEN)
         pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
         pygame.mouse.set_visible(0)
 

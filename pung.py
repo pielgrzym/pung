@@ -21,8 +21,6 @@ def main():
     # initialize views
     menu_view = views.MenuView()
     event_manager.register_listener(menu_view)
-    #game_view = views.GameView(size=size)
-    #event_manager.register_listener(game_view)
 
     # start master loop
     loop.run()
