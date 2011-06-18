@@ -21,7 +21,7 @@ class Score(object):
     def draw_player_score(self):
         """
         Draws text with player score
-    
+
         """
         background = self.background
         font = pygame.font.Font(None, 42)
@@ -34,7 +34,7 @@ class Score(object):
     def erase_player_score(self):
         """
         Removes text with player score
-    
+
         """
         background = self.background
         self.player_text.fill((0,0,0))
@@ -43,7 +43,7 @@ class Score(object):
     def draw_ai_score(self):
         """
         Draws text with ai score
-    
+
         """
         background = self.background
         font = pygame.font.Font(None, 42)
@@ -56,7 +56,7 @@ class Score(object):
     def erase_ai_score(self):
         """
         Removes text with ai score
-    
+
         """
         background = self.background
         self.ai_text.fill((0,0,0))
@@ -65,7 +65,7 @@ class Score(object):
     def reset(self):
         """
         Reset all scores
-    
+
         """
         self.player = 0
         self.ai = 0
@@ -73,9 +73,9 @@ class Score(object):
     def __check_win(self):
         """
         Checks if one of the players won
-    
+
         """
-    
+
         if self.player != self.ai:
             if self.player - self.ai > 1:
                 self.event_manager.post(events.GameOverEvent(win=True))
@@ -85,9 +85,9 @@ class Score(object):
     def modify_score(self, event):
         """
         Modify score based on event
-    
+
         """
-    
+
         if event.ai:
             self.point_for_ai()
         elif event.player:
@@ -98,17 +98,17 @@ class Score(object):
     def point_for_player(self):
         """
         Increment score for player
-    
+
         """
         self.erase_player_score()
         self.player += 1
         self.draw_player_score()
         self.__check_win()
-    
+
     def point_for_ai(self):
         """
         Increment score for ai
-    
+
         """
         self.erase_ai_score()
         self.ai += 1

@@ -17,7 +17,7 @@ class LoopController(Controller):
     def run(self):
         """
         Main cpu loop
-    
+
         """
         event = events.TickEvent()
         while self.is_running:

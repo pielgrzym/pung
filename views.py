@@ -9,13 +9,13 @@ class View(object):
     def __init__(self, size=(800,600)):
         """
         Setup the screen
-    
+
         """
-    
+
         self._setup_screen(size)
 
     def register_surface(self, surface):
-        if hasattr(self, 'surfaces'): 
+        if hasattr(self, 'surfaces'):
             self.surfaces.append(surface)
         else:
             self.surfaces = [surface]
@@ -23,18 +23,18 @@ class View(object):
     def _blit_registered_surfaces(self):
         """
         Blit registered surfaces - called on each tick
-    
+
         """
-        if hasattr(self, 'surfaces'): 
+        if hasattr(self, 'surfaces'):
             for surface, rect in self.surfaces:
                 self.background.blit(surface, rect)
 
     def _setup_screen(self, size):
         """
         Sets up the screen
-    
+
         """
-        self.screen = pygame.display.set_mode(size)#, pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
         pygame.display.set_caption("Trollface pung. Enjoy. v0.40")
         pygame.mouse.set_visible(0)
 
@@ -94,7 +94,7 @@ class MenuView(View):
     def select_item(self, group):
         """
         Uses item action
-    
+
         """
         sprite_list = group.sprites()
         for i, sprite in enumerate(sprite_list):
@@ -128,7 +128,7 @@ class MenuView(View):
     def notify(self, event):
         """
         Recieve events
-    
+
         """
         if isinstance(event, events.TickEvent):
             if not self.stopped:
@@ -144,7 +144,7 @@ class MenuView(View):
                 self.focus_next(self.menu_items)
             elif event.action == 'select':
                 self.select_item(self.menu_items)
-    
+
 
 class GameView(View):
     def __init__(self, size=(800,600)):
@@ -159,9 +159,9 @@ class GameView(View):
     def reset(self):
         """
         Resets score and sprites
-    
+
         """
-    
+
         self.allsprites.empty()
         self._setup_background()
         self._setup_sprites()
@@ -171,7 +171,7 @@ class GameView(View):
     def _setup_score(self):
         """
         Sets up the score object
-    
+
         """
         from score import Score
         self.score = Score(self.background)
@@ -179,7 +179,7 @@ class GameView(View):
     def _setup_sprites(self):
         """
         Initializes all sprites
-    
+
         """
         from sprite import Pad, Ball
         self.pad_left = Pad(relative_to=self.playarea_rect)
@@ -245,7 +245,7 @@ class GameView(View):
     def notify(self, event):
         """
         Recieve events
-    
+
         """
         if isinstance(event, events.TickEvent) and not self.stopped:
             if not self.paused:

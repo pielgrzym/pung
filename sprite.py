@@ -68,7 +68,7 @@ class Ball(MVCSprite):
     def reset(self):
         """
         Sets the ball in right place :]
-    
+
         """
         screen = pygame.display.get_surface()
         self.rect.topleft = screen.get_size()[0]/2, screen.get_size()[1]/2 # start pos
@@ -78,7 +78,7 @@ class Ball(MVCSprite):
         """
         This function only checks collisions with playarea_rect
         and if they occur with left/right edge it calls score events
-    
+
         """
         newpos = self.rect.move(self.movement_vector[0], self.movement_vector[1])
         if not self.relative_to.contains(newpos):

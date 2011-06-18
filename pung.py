@@ -6,7 +6,7 @@ from event_manager import event_manager
 
 def main():
     """
-    Behold! Here happens The Main Shit. 
+    Behold! Here happens The Main Shit.
 
     """
     pygame.init()

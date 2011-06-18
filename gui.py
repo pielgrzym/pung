@@ -18,9 +18,9 @@ class Widget(pygame.sprite.Sprite):
     def kill(self):
         """
         Remove widget
-    
+
         """
-    
+
         self.container = None
         del self.container
         pygame.sprite.Sprite.kill(self)
